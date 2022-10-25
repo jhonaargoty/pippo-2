@@ -6,13 +6,13 @@ function Index() {
   const baseURL = "http://localhost:3000/api/v1";
   const [ganaderos, setGanaderos] = useState(null);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     axios.get(baseURL).then((response) => {
       setGanaderos(response.data);
     });
   }, []);
 
-  console.log("POST", ganaderos);
+  console.log("POST", ganaderos); */
 
   const props = { ganaderos };
 

@@ -2,8 +2,8 @@ import React from "react";
 import { icons } from "../icons";
 import "./styles.scss";
 
-function View({ ganaderos }) {
-  /*  const ganaderos = [
+function View(/* { ganaderos } */) {
+  const ganaderos = [
     {
       documento: 1030543123,
       telefono: 3128755945,
@@ -44,7 +44,7 @@ function View({ ganaderos }) {
       promedio: 400,
       precio_x_lt: 500,
     },
-  ]; */
+  ];
 
   return (
     <div className="page" id="full">
