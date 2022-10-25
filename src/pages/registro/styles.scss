@@ -1,0 +1,17 @@
+.pippo-app {
+  display: flex;
+
+  .menu {
+    width: 10%;
+    border-right: 1px solid black;
+  }
+
+  .main {
+    width: 90%;
+  }
+
+  .img-logo {
+    width: 80%;
+    margin: 0 auto;
+  }
+}
