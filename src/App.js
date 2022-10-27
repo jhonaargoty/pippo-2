@@ -31,11 +31,9 @@ function App() {
           <div className="menu-list">
             {navs.map((nav) => {
               return (
-                <div className="menu-list-item">
-                  <Link key={nav.id} to={nav.path}>
-                    {nav.name}
-                  </Link>
-                </div>
+                <Link key={nav.id} to={nav.path}>
+                  <div className="menu-list-item">{nav.name}</div>
+                </Link>
               );
             })}
           </div>

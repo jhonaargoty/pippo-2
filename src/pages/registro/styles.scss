@@ -1,17 +1,26 @@
-.pippo-app {
-  display: flex;
+.registro {
+  .formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 200px;
 
-  .menu {
-    width: 10%;
-    border-right: 1px solid black;
+    div {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      input {
+        height: 30px;
+      }
+
+      select {
+        height: 40px;
+      }
+    }
   }
 
-  .main {
-    width: 90%;
-  }
-
-  .img-logo {
-    width: 80%;
-    margin: 0 auto;
+  .button-save {
+    height: 30px;
   }
 }

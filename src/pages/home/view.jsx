@@ -5,7 +5,7 @@ import "./styles.scss";
 function View() {
   return (
     <div className="page" id="full">
-      HOME
+      <div className="header-page">Inicio</div>
     </div>
   );
 }

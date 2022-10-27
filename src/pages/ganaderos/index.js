@@ -3,16 +3,17 @@ import axios from "axios";
 import View from "./view";
 
 function Index() {
-  const baseURL = "http://localhost:3000/api/v1";
+  const baseURL = "/databaseconnect.php";
   const [ganaderos, setGanaderos] = useState(null);
 
-  /*   useEffect(() => {
+  useEffect(() => {
     axios.get(baseURL).then((response) => {
+      console.log("RESPONSE", response);
       setGanaderos(response.data);
     });
   }, []);
 
-  console.log("POST", ganaderos); */
+  console.log("POST", ganaderos);
 
   const props = { ganaderos };
 
