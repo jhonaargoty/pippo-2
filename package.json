@@ -1,5 +1,5 @@
 {
-  "homepage": "https://jhonaargoty.github.io/pippo-2/",
+  "homepage": "https://jhonaargoty.github.io/pippo-2",
   "name": "app-pippo",
   "version": "0.1.0",
   "private": true,
@@ -54,5 +54,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^4.0.0"
   }
 }
