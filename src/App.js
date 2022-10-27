@@ -1,6 +1,12 @@
 import React from "react";
 import logo from "./logo.svg";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  HashRouter,
+} from "react-router-dom";
 import Ganaderos from "./pages/ganaderos";
 import Rutas from "./pages/rutas";
 import Home from "./pages/home";
@@ -25,7 +31,7 @@ function App() {
 
   return (
     <div className="main-content">
-      <BrowserRouter>
+      <HashRouter>
         <div className="menu">
           <div className="img-logo">{icons("logo")}</div>
           <div className="menu-list">
@@ -44,7 +50,7 @@ function App() {
             return <Route key={nav.id} path={nav.path} element={nav.element} />;
           })}
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }
