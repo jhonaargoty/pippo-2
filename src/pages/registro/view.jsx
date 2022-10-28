@@ -1,5 +1,6 @@
 import React from "react";
-import { icons } from "../icons";
+import { BsNodePlusFill } from "react-icons/bs";
+import Header from "../header";
 import { useForm } from "react-hook-form";
 import "./styles.scss";
 
@@ -14,8 +15,10 @@ function View() {
 
   return (
     <div className="page registro" id="full">
-      <div className="header-page">Registro</div>
-      <div>
+      <div className="header-page">
+        <Header title="Registro" icon={<BsNodePlusFill />} />
+      </div>
+      <div className="content-page">
         <h3>Ruta: Nombre ruta</h3>
         <div>
           <form onSubmit={handleSubmit(onSubmit)} className="formulario">
