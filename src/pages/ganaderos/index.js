@@ -3,7 +3,7 @@ import axios from "axios";
 import View from "./view";
 
 function Index() {
-  const baseURL = "/databaseconnect.php";
+  const baseURL = "https://pippo-test.000webhostapp.com/database.php";
   const [ganaderos, setGanaderos] = useState(null);
 
   useEffect(() => {

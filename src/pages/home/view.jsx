@@ -5,7 +5,7 @@ import "./styles.scss";
 function View() {
   return (
     <div className="page" id="full">
-      <div className="header-page">Iniciox</div>
+      <div className="header-page">Iniciox2</div>
     </div>
   );
 }
