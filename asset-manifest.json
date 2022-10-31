@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/pippo-2/static/css/main.6ee46c03.css",
-    "main.js": "/pippo-2/static/js/main.b9853574.js",
+    "main.css": "/pippo-2/static/css/main.b691625a.css",
+    "main.js": "/pippo-2/static/js/main.424b1d6b.js",
     "static/js/787.f4f8fa85.chunk.js": "/pippo-2/static/js/787.f4f8fa85.chunk.js",
     "service-worker.js": "/pippo-2/service-worker.js",
     "static/media/logo_pipo.png": "/pippo-2/static/media/logo_pipo.1d426fc4e0e32a741baa.png",
     "index.html": "/pippo-2/index.html",
-    "main.6ee46c03.css.map": "/pippo-2/static/css/main.6ee46c03.css.map",
-    "main.b9853574.js.map": "/pippo-2/static/js/main.b9853574.js.map",
+    "main.b691625a.css.map": "/pippo-2/static/css/main.b691625a.css.map",
+    "main.424b1d6b.js.map": "/pippo-2/static/js/main.424b1d6b.js.map",
     "787.f4f8fa85.chunk.js.map": "/pippo-2/static/js/787.f4f8fa85.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.6ee46c03.css",
-    "static/js/main.b9853574.js"
+    "static/css/main.b691625a.css",
+    "static/js/main.424b1d6b.js"
   ]
 }
