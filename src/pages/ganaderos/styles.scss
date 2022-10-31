@@ -20,48 +20,39 @@
       label {
         width: 100px;
       }
-      input {
-        height: 20px;
-      }
     }
 
-    .button {
+    .button-form {
       display: flex;
       justify-content: center;
-    }
-
-    .button-save {
-      cursor: pointer;
-      border: 1px solid #c90000;
-      border-radius: 10px;
-      padding: 10px 20px;
-      background: none;
-      color: inherit;
-      outline: inherit;
-
-      &:focus {
-        outline: 0;
-      }
-      &:active {
-        outline: 0;
-        border-style: solid;
-      }
-      &:hover {
-        background: red;
-        color: #ffffff;
-      }
     }
   }
   .tabla {
     width: 100%;
+    border-collapse: collapse;
 
     tr {
       text-align: center;
     }
 
+    tbody {
+      tr {
+        &:hover {
+          background: #f3f6f9;
+        }
+      }
+    }
+
     th,
     td {
       padding: 20px 0;
+      border: none;
+    }
+
+    .actions {
+      cursor: pointer;
+      display: flex;
+      gap: 10px;
     }
   }
 }

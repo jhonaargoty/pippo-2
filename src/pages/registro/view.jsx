@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { BsNodePlusFill } from "react-icons/bs";
 import Header from "../header";
 import { useForm } from "react-hook-form";
 import "./styles.scss";
 
-function View() {
+function View({ ganaderos }) {
   const {
     register,
     handleSubmit,
@@ -12,6 +12,9 @@ function View() {
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => console.log(data);
+
+  const ganaderoSelect = watch("ganadero");
+  const litrosSelect = watch("litros");
 
   return (
     <div className="page registro" id="full">
@@ -25,9 +28,9 @@ function View() {
             <div>
               <label>Seleccione ganadero</label>
               <select {...register("ganadero")}>
-                <option value="ganadero1">ganadero1</option>
-                <option value="ganadero2">ganadero2</option>
-                <option value="ganadero3">ganadero3</option>
+                {ganaderos.map((item) => (
+                  <option value={item.documento}>{item.nombre}</option>
+                ))}
               </select>
             </div>
 
@@ -37,10 +40,25 @@ function View() {
             </div>
 
             <div>
-              <label htmlFor="">Precio $123</label>
+              <label htmlFor="">
+                Precio Lt $
+                {
+                  ganaderos.filter(
+                    (item) => item.documento === ganaderoSelect
+                  )[0].precio
+                }
+              </label>
+            </div>
+            <div>
+              <label htmlFor="">
+                Precio Total $
+                {ganaderos.filter(
+                  (item) => item.documento === ganaderoSelect
+                )[0].precio * litrosSelect}
+              </label>
             </div>
 
-            <input type="submit" value="Guardar" className="button-save" />
+            <input type="submit" value="Guardar" className="button" />
           </form>
         </div>
       </div>

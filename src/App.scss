@@ -59,6 +59,11 @@
         color: #c90000;
       }
     }
+
+    &-item.active {
+      background-color: #f3f6f9;
+      color: #c90000;
+    }
   }
 }
 .img-logo {
@@ -77,6 +82,7 @@
   .main {
     width: 80%;
     padding: 20px;
+    padding-bottom: 60px;
 
     &-header {
       background-color: #ffffff;
@@ -98,6 +104,10 @@
         display: flex;
         align-items: center;
         gap: 5px;
+      }
+      .user-off {
+        cursor: pointer;
+        margin-top: 6px;
       }
     }
 

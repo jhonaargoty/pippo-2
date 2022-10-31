@@ -1,8 +1,9 @@
 import React from "react";
+
 import View from "./view";
 
-function Index({ ganaderos }) {
-  const props = { ganaderos };
+function Index({ setLogin }) {
+  const props = { setLogin };
 
   return <View {...props} />;
 }

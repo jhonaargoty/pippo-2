@@ -26,7 +26,7 @@ body {
   padding: 0px;
 }
 #full {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
 }
 
@@ -36,4 +36,44 @@ img {
 
 * {
   margin: 0;
+}
+
+select {
+  height: 40px;
+  border-radius: 10px;
+  padding: 0 10px;
+  border: 1px solid #c9000059;
+}
+
+input {
+  height: 40px;
+  border-radius: 10px;
+  padding: 0 10px;
+  border: 1px solid #c9000059;
+}
+
+input:focus {
+  outline: none;
+  border: 1px solid #c9000059;
+}
+
+.button {
+  margin: 0 auto;
+  border: 1px solid #c90000;
+  padding: 10px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  background-color: #c90000;
+  color: #ffffff;
+}
+
+.button:hover {
+  background-color: #c90000e6;
+  color: #ffffff;
+}
+
+.button:disabled {
+  background-color: #75757582;
+  border: #75757582;
+  cursor: default;
 }

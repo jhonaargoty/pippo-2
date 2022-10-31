@@ -1,52 +1,66 @@
 import React, { useState } from "react";
 import { FaHatCowboy, FaUserPlus } from "react-icons/fa";
+import { MdDeleteForever } from "react-icons/md";
+import { AiFillEdit } from "react-icons/ai";
 import Header from "../header";
-import { useForm } from "react-hook-form";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./styles.scss";
 
-function View({ ganaderos }) {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
-  const onSubmit = (data) => console.log(data);
-
+function View({
+  ganaderos,
+  onSubmit,
+  handleSubmit,
+  register,
+  isValid,
+  deleteItem,
+}) {
   const [viewAdd, setViewAdd] = useState(false);
 
   const formAdd = [
     {
       label: "Documento",
       type: "text",
-      ...register("documento"),
+      ...register("documento", {
+        required: true,
+      }),
     },
     {
       label: "Teléfono",
       type: "number",
-      ...register("telefono"),
+      ...register("telefono", {
+        required: true,
+      }),
       min: 0,
     },
     {
       label: "Nombre",
       type: "text",
-      ...register("nombre"),
+      ...register("nombre", {
+        required: true,
+      }),
     },
     {
       label: "Dirección",
       type: "text",
-      ...register("direccion"),
+      ...register("direccion", {
+        required: true,
+      }),
     },
     {
       label: "Promedio",
       type: "number",
-      ...register("promedio"),
+      ...register("promedio", {
+        required: true,
+      }),
       min: 1,
     },
     {
       label: "Precio",
       type: "number",
-      ...register("precio"),
+      ...register("precio", {
+        required: true,
+      }),
       min: 1,
     },
   ];
@@ -71,8 +85,13 @@ function View({ ganaderos }) {
                 <input {...item} />
               </div>
             ))}
-            <div className="button">
-              <input type="submit" value="Guardar" className="button-save" />
+            <div className="button-form">
+              <input
+                type="submit"
+                value="Guardar"
+                className="button"
+                disabled={!isValid}
+              />
             </div>
           </form>
         )}
@@ -88,21 +107,35 @@ function View({ ganaderos }) {
               <th>Dirección</th>
               <th>Promedio</th>
               <th>Precio x Litro</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            {ganaderos?.map((ganadero) => (
-              <tr>
+            {ganaderos?.map((ganadero, index) => (
+              <tr key={index}>
                 <td>{ganadero.documento}</td>
                 <td>{ganadero.telefono}</td>
                 <td>{ganadero.nombre}</td>
                 <td>{ganadero.direccion}</td>
                 <td>{ganadero.promedio} lts</td>
-                <td>$ {ganadero.precio_x_lt}</td>
+                <td>$ {ganadero.precio}</td>
+                <td className="actions">
+                  <MdDeleteForever
+                    onClick={() => {
+                      deleteItem(ganadero.documento);
+                    }}
+                  />
+                  <AiFillEdit />
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <ToastContainer
+          position="bottom-center"
+          theme="colored"
+          autoClose={5000}
+        />
       </div>
     </div>
   );

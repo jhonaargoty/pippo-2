@@ -1,21 +1,84 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import View from "./view";
 
-function Index() {
-  const baseURL = "https://pippo-test.000webhostapp.com/database.php";
-  const [ganaderos, setGanaderos] = useState(null);
+import View from "./view";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+
+function Index({ getListAllGanaderos, ganaderos }) {
+  const notifySuccess = (message) => toast.success(`Se ${message} el ganadero`);
+  const notifyError = () => toast.error("Error, intente de nuevo");
+
+  const {
+    reset,
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isValid },
+  } = useForm({ mode: "onChange" });
 
   useEffect(() => {
-    axios.get(baseURL).then((response) => {
-      console.log("RESPONSE", response);
-      setGanaderos(response.data);
-    });
+    //getListAllGanaderos();
   }, []);
 
-  console.log("POST", ganaderos);
+  const onSubmit = (data) => {
+    /* let myJSON = {
+      item: {
+        ...data,
+      },
+    }; */
+    fetch("https://pippo-test.000webhostapp.com/api/ganaderos/add.php", {
+      method: "POST",
+      body: JSON.stringify({
+        item: {
+          ...data,
+        },
+      }),
+    })
+      .then((response) => {
+        if (response.status === 400) {
+          notifyError();
+        } else {
+          notifySuccess("agrego");
+          getListAllGanaderos();
+          reset();
+        }
+      })
+      .catch((error) => {
+        notifyError();
+      });
+  };
 
-  const props = { ganaderos };
+  const deleteItem = (documento) => {
+    fetch("https://pippo-test.000webhostapp.com/api/ganaderos/delete.php", {
+      method: "POST",
+      body: JSON.stringify({
+        item: {
+          documento: documento,
+        },
+      }),
+    })
+      .then((response) => {
+        if (response.status === 400) {
+          notifyError();
+        } else {
+          notifySuccess("elimino");
+          getListAllGanaderos();
+          reset();
+        }
+      })
+      .catch((error) => {
+        notifyError();
+      });
+  };
+
+  const props = {
+    ganaderos,
+    onSubmit,
+    handleSubmit,
+    register,
+    isValid,
+    deleteItem,
+  };
 
   return <View {...props} />;
 }
