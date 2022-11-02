@@ -15,7 +15,37 @@ function Index({ ganaderos, rutas, conductores }) {
     (c) => c.usuario === userLoggued[0].usuario
   )[0];
 
+  /* const checkConnection = () => {
+    if (navigator.onLine) {
+      console.log("ok");
+    } else {
+      console.log("pailas");
+    }
+  };
+  setTimeout(checkConnection, 5000);
+ */
   console.log(conductorInfo);
+
+  const guardarDatos = (dataSend) => {
+    fetch("https://pippo-test.000webhostapp.com/api/registro/addRegistro.php", {
+      method: "POST",
+      body: JSON.stringify({
+        item: dataSend,
+      }),
+    })
+      .then((response) => {
+        if (response.status === 400) {
+          notifyError();
+        } else {
+          notifySuccess("agrego");
+          /*  getListAllGanaderos();
+       reset(); */
+        }
+      })
+      .catch((error) => {
+        notifyError();
+      });
+  };
 
   const {
     register,
@@ -31,36 +61,24 @@ $ruta = $item["ruta"];
 $litros = $item["litros"];
 $precio = $item["precio"]; */
 
-    fetch("https://pippo-test.000webhostapp.com/api/registro/addRegistro.php", {
-      method: "POST",
-      body: JSON.stringify({
-        item: {
-          conductor: conductorInfo?.id,
-          fecha: today,
-          ganadero: ganaderoSelect,
-          ruta: conductorInfo?.ruta,
-          litros: litrosSelect,
-          precio: ganaderos?.filter(
-            (item) => item.documento === ganaderoSelect
-          )[0]?.precio,
-          total:
-            ganaderos?.filter((item) => item.documento === ganaderoSelect)[0]
-              ?.precio * litrosSelect,
-        },
-      }),
-    })
-      .then((response) => {
-        if (response.status === 400) {
-          notifyError();
-        } else {
-          notifySuccess("agrego");
-          /*  getListAllGanaderos();
-       reset(); */
-        }
-      })
-      .catch((error) => {
-        notifyError();
-      });
+    const dataSend = {
+      conductor: conductorInfo?.id,
+      fecha: today,
+      ganadero: ganaderoSelect,
+      ruta: conductorInfo?.ruta,
+      litros: litrosSelect,
+      precio: ganaderos?.filter((item) => item.documento === ganaderoSelect)[0]
+        ?.precio,
+      total:
+        ganaderos?.filter((item) => item.documento === ganaderoSelect)[0]
+          ?.precio * litrosSelect,
+    };
+
+    if (navigator.onLine) {
+      guardarDatos(dataSend);
+    } else {
+      localStorage.setItem("registro", JSON.stringify(dataSend));
+    }
   };
 
   const ganaderoSelect = watch("ganadero");
