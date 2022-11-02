@@ -101,24 +101,26 @@ function View({
         <table className="tabla">
           <thead>
             <tr>
-              <th>Documento</th>
-              <th>Teléfono</th>
-              <th>Nombre</th>
-              <th>Dirección</th>
-              <th>Promedio</th>
-              <th>Precio x Litro</th>
-              <th></th>
+              <th scope="col">Documento</th>
+              <th scope="col">Teléfono</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Dirección</th>
+              <th scope="col">Ruta</th>
+              <th scope="col">Promedio</th>
+              <th scope="col">Precio x Litro</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
             {ganaderos?.map((ganadero, index) => (
               <tr key={index}>
-                <td>{ganadero.documento}</td>
-                <td>{ganadero.telefono}</td>
-                <td>{ganadero.nombre}</td>
-                <td>{ganadero.direccion}</td>
-                <td>{ganadero.promedio} lts</td>
-                <td>$ {ganadero.precio}</td>
+                <td data-label="documento">{ganadero.documento}</td>
+                <td data-label="teléfono">{ganadero.telefono}</td>
+                <td data-label="nombre">{ganadero.nombre}</td>
+                <td data-label="dirección">{ganadero.direccion}</td>
+                <td data-label="ruta">{ganadero.ruta}</td>
+                <td data-label="promedio">{ganadero.promedio} lts</td>
+                <td data-label="precio litro">$ {ganadero.precio}</td>
                 <td className="actions">
                   <MdDeleteForever
                     onClick={() => {

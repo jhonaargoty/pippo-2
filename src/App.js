@@ -8,7 +8,7 @@ import Conductores from "./pages/conductores";
 import Registro from "./pages/registro";
 import Exportar from "./pages/exportar";
 import { icons } from "./pages/icons";
-import { AiFillHome } from "react-icons/ai";
+import { AiFillHome, AiOutlineClose } from "react-icons/ai";
 import { FaHatCowboy, FaRoute, FaUserCircle, FaPowerOff } from "react-icons/fa";
 import { ImTruck } from "react-icons/im";
 import { RiFileExcel2Fill } from "react-icons/ri";
@@ -16,10 +16,28 @@ import { BsNodePlusFill } from "react-icons/bs";
 import { TiThMenu } from "react-icons/ti";
 import moment from "moment";
 import axios from "axios";
+import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import { USERS } from "./constants";
 import "./App.scss";
 
 function App() {
-  const userLoggued = JSON.parse(localStorage.getItem("user"));
+  const [userLoggued, setUserLoggued] = useState(
+    JSON.parse(localStorage.getItem("user"))
+  );
+  const notifySuccess = () => toast.success(`HAY INTERNET`);
+  const notifyError = () => toast.error(`NO HAY INTERNET`);
+
+  const checkConnection = () => {
+    if (navigator.onLine) {
+      notifySuccess();
+      console.log("ok");
+    } else {
+      notifyError();
+      console.log("pailas");
+    }
+  };
+  //setTimeout(checkConnection, 5000);
 
   const today = moment().format("DD-MM-YYYY");
 
@@ -121,16 +139,29 @@ function App() {
     },
   ];
 
+  const [login, setLogin] = useState(false);
   const [navi, setNav] = useState("Inicio");
+
+  console.log(userLoggued?.length);
+
+  useEffect(() => {
+    console.log("aqui");
+    setUserLoggued(JSON.parse(localStorage.getItem("user")));
+  }, [login]);
 
   return (
     <div className="main-content">
       <HashRouter>
-        {userLoggued?.length ? (
+        {userLoggued?.length >= 1 ? (
           <>
             <div className={`menu ${viewMenu ? "movil-view" : "movil-noview"}`}>
               <div className="img-logo">{icons("logo")}</div>
+
               <div className="menu-list">
+                <div className="close-menu" onClick={() => setViewMenu(false)}>
+                  <AiOutlineClose />
+                </div>
+
                 {navs.map((nav) => {
                   return (
                     <Link key={nav.id} to={nav.path}>
@@ -166,12 +197,20 @@ function App() {
                   {today}
                   <div className="user">
                     <FaUserCircle />
-                    <label>{userLoggued[0]?.usuario}</label>
+                    <div className="data">
+                      <span>{userLoggued[0]?.usuario}</span>
+                      <span className="tipo">
+                        {USERS[userLoggued[0]?.tipo]}
+                      </span>
+                    </div>
                   </div>
                   <Link to={"/"}>
                     <div
                       className="user-off"
-                      onClick={() => localStorage.removeItem("user")}
+                      onClick={() => {
+                        setLogin(false);
+                        localStorage.removeItem("user");
+                      }}
                     >
                       <FaPowerOff />
                     </div>
@@ -190,11 +229,16 @@ function App() {
         ) : (
           <>
             <Routes>
-              <Route path={"/"} element={<Login />} />
+              <Route path={"/"} element={<Login setLogin={setLogin} />} />
             </Routes>
           </>
         )}
       </HashRouter>
+      <ToastContainer
+        position="bottom-center"
+        theme="colored"
+        autoClose={5000}
+      />
     </div>
   );
 }

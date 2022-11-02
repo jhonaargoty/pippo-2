@@ -14,15 +14,19 @@ function View({ rutas }) {
         <table className="tabla">
           <thead>
             <tr>
-              <th>Nombre</th>
-              <th>Direccion</th>
+              <th scope="col">Id</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Direccion</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {rutas?.map((ruta) => (
               <tr>
-                <td>{ruta.nombre}</td>
-                <td>{ruta.dirección}</td>
+                <td data-label="id">{ruta.id}</td>
+                <td data-label="nombre">{ruta.nombre.toUpperCase()}</td>
+                <td data-label="direccion">{ruta.dirección}</td>
+                <td>x</td>
               </tr>
             ))}
           </tbody>

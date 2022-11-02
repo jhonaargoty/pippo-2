@@ -81,10 +81,10 @@
 
   .main {
     width: 80%;
-    padding: 20px;
     padding-bottom: 60px;
 
     &-header {
+      align-items: center;
       background-color: #ffffff;
       padding: 20px;
       border-radius: 20px;
@@ -104,6 +104,14 @@
         display: flex;
         align-items: center;
         gap: 5px;
+
+        .data {
+          display: flex;
+          flex-direction: column;
+          .tipo {
+            font-size: 10px;
+          }
+        }
       }
       .user-off {
         cursor: pointer;
@@ -116,6 +124,7 @@
       padding: 20px;
       border-radius: 20px;
       margin-bottom: 20px;
+      /* width: 100%; */
     }
   }
 }
@@ -136,6 +145,10 @@ a {
   }
 }
 
+.close-menu {
+  display: none;
+}
+
 .menu-movil {
   background-color: #ffffff;
 }
@@ -143,8 +156,130 @@ a {
 .movil {
   display: none;
 }
+.tabla {
+  border-collapse: collapse;
+  margin: 0;
+  padding: 10px 20px;
+  width: 100%;
+  table-layout: fixed;
+
+  th,
+  td {
+    padding: 10px 10px;
+    border: none;
+  }
+  thead {
+    border-bottom: 1px solid #c9000036;
+    margin-bottom: 10px;
+
+    th {
+      text-align: left;
+    }
+  }
+
+  caption {
+    font-size: 1.5em;
+    margin: 0.5em 0 0.75em;
+  }
+
+  th {
+    font-size: 0.85em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  tbody {
+    tr {
+      &:hover {
+        background: #f3f6f9;
+      }
+    }
+  }
+  .actions {
+    cursor: pointer;
+    display: flex;
+    gap: 10px;
+  }
+}
+
+@media (width > 768px) {
+  .main {
+    padding: 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .tabla {
+    border: 0;
+
+    caption {
+      font-size: 1.3em;
+    }
+
+    thead {
+      border: none;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+
+    tr {
+      border-bottom: 1px solid #c90000;
+      /*  display: block; */
+      margin-bottom: 0.625em;
+    }
+    tr:last-child {
+      border-bottom: none;
+    }
+
+    td {
+      border-bottom: 1px solid #dddddd4a;
+      display: block;
+      font-size: 0.8em;
+      text-align: right;
+      padding: 3px 0 !important;
+    }
+
+    td::before {
+      content: attr(data-label);
+      float: left;
+      font-weight: bold;
+      text-transform: capitalize;
+    }
+
+    td:last-child {
+      border-bottom: 0;
+    }
+    .actions {
+      justify-content: center;
+    }
+  }
+}
 
 @media (max-width: 768px) {
+  .main {
+    padding: 10px;
+  }
+  .close-menu {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .login {
+    padding: 10px;
+
+    input,
+    .label {
+      width: 100%;
+    }
+  }
+  .login-content {
+    width: 100%;
+  }
+
   .movil {
     display: flex;
   }

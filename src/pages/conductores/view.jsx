@@ -82,20 +82,20 @@ function View({
         <table className="tabla">
           <thead>
             <tr>
-              <th>Documento</th>
-              <th>Nombre</th>
-              <th>Ruta</th>
-              <th>Placa</th>
-              <th></th>
+              <th scope="col">Documento</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Ruta</th>
+              <th scope="col">Placa</th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
             {conductores?.map((conductor) => (
               <tr>
-                <td>{conductor?.documento}</td>
-                <td>{conductor?.nombre}</td>
-                <td>{conductor?.rutas}</td>
-                <td>{conductor?.placa}</td>
+                <td data-label="documento">{conductor?.documento}</td>
+                <td data-label="nombre">{conductor?.nombre}</td>
+                <td data-label="rutas">{conductor?.rutas}</td>
+                <td data-label="placa">{conductor?.placa}</td>
                 <td className="actions">
                   <MdDeleteForever
                     onClick={() => {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import View from "./view";
 import { toast } from "react-toastify";
 
-function Index() {
+function Index({ setLogin }) {
   const [user, setUser] = useState(null);
   const [password, setPassword] = useState(null);
   const notifyError = () => toast.error("Error, datos invalidos");
@@ -20,6 +20,7 @@ function Index() {
       .then((response) => response.json())
       .then((data) => {
         if (data.length) {
+          setLogin(true);
           localStorage.setItem("user", JSON.stringify(data));
         } else {
           notifyError();

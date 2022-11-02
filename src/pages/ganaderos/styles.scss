@@ -27,32 +27,4 @@
       justify-content: center;
     }
   }
-  .tabla {
-    width: 100%;
-    border-collapse: collapse;
-
-    tr {
-      text-align: center;
-    }
-
-    tbody {
-      tr {
-        &:hover {
-          background: #f3f6f9;
-        }
-      }
-    }
-
-    th,
-    td {
-      padding: 20px 0;
-      border: none;
-    }
-
-    .actions {
-      cursor: pointer;
-      display: flex;
-      gap: 10px;
-    }
-  }
 }

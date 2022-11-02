@@ -39,4 +39,12 @@
       flex: none;
     }
   }
+  @media screen and (max-width: 768px) {
+    .formulario {
+      width: 100%;
+    }
+    .content-page {
+      display: block;
+    }
+  }
 }
