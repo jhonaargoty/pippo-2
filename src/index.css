@@ -77,3 +77,8 @@ input:focus {
   border: #75757582;
   cursor: default;
 }
+.button.disabled {
+  background-color: #75757582;
+  border: #75757582;
+  cursor: default;
+}

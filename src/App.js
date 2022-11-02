@@ -6,10 +6,12 @@ import Home from "./pages/home";
 import Login from "./pages/login";
 import Conductores from "./pages/conductores";
 import Registro from "./pages/registro";
+import Exportar from "./pages/exportar";
 import { icons } from "./pages/icons";
 import { AiFillHome } from "react-icons/ai";
 import { FaHatCowboy, FaRoute, FaUserCircle, FaPowerOff } from "react-icons/fa";
 import { ImTruck } from "react-icons/im";
+import { RiFileExcel2Fill } from "react-icons/ri";
 import { BsNodePlusFill } from "react-icons/bs";
 import { TiThMenu } from "react-icons/ti";
 import moment from "moment";
@@ -17,20 +19,44 @@ import axios from "axios";
 import "./App.scss";
 
 function App() {
+  const userLoggued = JSON.parse(localStorage.getItem("user"));
+
   const today = moment().format("DD-MM-YYYY");
 
   const [viewMenu, setViewMenu] = useState(false);
   const [ganaderos, setGanaderos] = useState(null);
+  const [conductores, setConductores] = useState(null);
+  const [rutas, setRutas] = useState(null);
 
   useEffect(() => {
     getListAllGanaderos();
+    getListAllConductores();
+    getListAllRutas();
   }, []);
 
   const getListAllGanaderos = () => {
     axios
-      .get("https://pippo-test.000webhostapp.com/api/ganaderos/getList.php")
+      .get(
+        "https://pippo-test.000webhostapp.com/api/ganaderos/getListGanaderos.php"
+      )
       .then((response) => {
         setGanaderos(response.data);
+      });
+  };
+  const getListAllConductores = () => {
+    axios
+      .get(
+        "https://pippo-test.000webhostapp.com/api/conductores/getListConductores.php"
+      )
+      .then((response) => {
+        setConductores(response.data);
+      });
+  };
+  const getListAllRutas = () => {
+    axios
+      .get("https://pippo-test.000webhostapp.com/api/rutas/getListRutas.php")
+      .then((response) => {
+        setRutas(response.data);
       });
   };
 
@@ -58,32 +84,49 @@ function App() {
       id: 3,
       name: "Rutas",
       path: "/rutas",
-      element: <Rutas />,
+      element: <Rutas getListAllGanaderos={getListAllRutas} rutas={rutas} />,
       icon: <FaRoute />,
     },
     {
       id: 4,
       name: "Conductores",
       path: "/conductores",
-      element: <Conductores />,
+      element: (
+        <Conductores
+          getListAllConductores={getListAllConductores}
+          conductores={conductores}
+        />
+      ),
       icon: <ImTruck />,
     },
     {
       id: 5,
       name: "Registro",
       path: "/registro",
-      element: <Registro ganaderos={ganaderos} />,
+      element: (
+        <Registro
+          ganaderos={ganaderos}
+          rutas={rutas}
+          conductores={conductores}
+        />
+      ),
       icon: <BsNodePlusFill />,
+    },
+    {
+      id: 5,
+      name: "Exportar",
+      path: "/exportar",
+      element: <Exportar />,
+      icon: <RiFileExcel2Fill />,
     },
   ];
 
-  const [login, setLogin] = useState(false);
   const [navi, setNav] = useState("Inicio");
 
   return (
     <div className="main-content">
       <HashRouter>
-        {login ? (
+        {userLoggued?.length ? (
           <>
             <div className={`menu ${viewMenu ? "movil-view" : "movil-noview"}`}>
               <div className="img-logo">{icons("logo")}</div>
@@ -123,10 +166,13 @@ function App() {
                   {today}
                   <div className="user">
                     <FaUserCircle />
-                    <label>Jhonatan Argoty</label>
+                    <label>{userLoggued[0]?.usuario}</label>
                   </div>
                   <Link to={"/"}>
-                    <div className="user-off" onClick={() => setLogin(false)}>
+                    <div
+                      className="user-off"
+                      onClick={() => localStorage.removeItem("user")}
+                    >
                       <FaPowerOff />
                     </div>
                   </Link>
@@ -144,7 +190,7 @@ function App() {
         ) : (
           <>
             <Routes>
-              <Route path={"/"} element={<Login setLogin={setLogin} />} />
+              <Route path={"/"} element={<Login />} />
             </Routes>
           </>
         )}

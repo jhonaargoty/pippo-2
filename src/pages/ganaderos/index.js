@@ -21,11 +21,6 @@ function Index({ getListAllGanaderos, ganaderos }) {
   }, []);
 
   const onSubmit = (data) => {
-    /* let myJSON = {
-      item: {
-        ...data,
-      },
-    }; */
     fetch("https://pippo-test.000webhostapp.com/api/ganaderos/add.php", {
       method: "POST",
       body: JSON.stringify({

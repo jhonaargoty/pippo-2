@@ -1,17 +1,58 @@
-.pippo-app {
-  display: flex;
-
-  .menu {
-    width: 10%;
-    border-right: 1px solid black;
+.conductores {
+  .add {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    width: fit-content;
   }
 
-  .main {
-    width: 90%;
-  }
+  .formulario {
+    padding: 20px;
+    border: 0.5px solid #c900004a;
+    width: fit-content;
+    margin: 20px 0;
+    border-radius: 10px;
+    &-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      label {
+        width: 100px;
+      }
+    }
 
-  .img-logo {
-    width: 80%;
-    margin: 0 auto;
+    .button-form {
+      display: flex;
+      justify-content: center;
+    }
+  }
+  .tabla {
+    width: 100%;
+    border-collapse: collapse;
+
+    tr {
+      text-align: center;
+    }
+
+    tbody {
+      tr {
+        &:hover {
+          background: #f3f6f9;
+        }
+      }
+    }
+
+    th,
+    td {
+      padding: 20px 0;
+      border: none;
+    }
+
+    .actions {
+      cursor: pointer;
+      display: flex;
+      gap: 10px;
+    }
   }
 }

@@ -4,8 +4,9 @@ import Header from "../header";
 import "./styles.scss";
 
 function View({ rutas }) {
+  console.log(rutas);
   return (
-    <div className="page" id="full">
+    <div className="page rutas" id="full">
       <div className="header-page">
         <Header title="Rutas" icon={<FaRoute />} />
       </div>
@@ -21,7 +22,7 @@ function View({ rutas }) {
             {rutas?.map((ruta) => (
               <tr>
                 <td>{ruta.nombre}</td>
-                <td>{ruta.direccion}</td>
+                <td>{ruta.dirección}</td>
               </tr>
             ))}
           </tbody>

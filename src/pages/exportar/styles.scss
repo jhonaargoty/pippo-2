@@ -1,0 +1,34 @@
+.exportar {
+  h3 {
+    margin-bottom: 30px;
+  }
+
+  .content-page {
+    display: flex;
+    justify-content: center;
+
+    .data-button {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .dates-select {
+      display: flex;
+      gap: 10px;
+    }
+  }
+
+  .download {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: none;
+    color: #c90000;
+
+    &:hover {
+      background: #fff0f0;
+    }
+  }
+}

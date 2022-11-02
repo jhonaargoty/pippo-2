@@ -15,4 +15,28 @@
       width: 100%;
     }
   }
+
+  .content-page {
+    display: flex;
+    justify-content: center;
+  }
+
+  .content-form {
+    border: 1px solid #c90000;
+    padding: 30px;
+    border-radius: 10px;
+
+    .price-main {
+      display: flex;
+      gap: 20px;
+      justify-content: space-between;
+    }
+    .price {
+      color: #005e03;
+      font-size: 20px;
+      display: flex;
+      width: fit-content;
+      flex: none;
+    }
+  }
 }
