@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -15,16 +15,26 @@ function Index({ ganaderos, rutas, conductores }) {
     (c) => c.usuario === userLoggued[0].usuario
   )[0];
 
-  /* const checkConnection = () => {
+  const checkConnection = () => {
     if (navigator.onLine) {
-      console.log("ok");
-    } else {
-      console.log("pailas");
+      if (JSON.parse(localStorage.getItem("registro"))) {
+        console.log(JSON.parse(localStorage.getItem("registro")));
+
+        const existing = JSON.parse(localStorage.getItem("registro"));
+
+        existing.map((item) => guardarDatos(item));
+      } else {
+        console.log("no hay");
+      }
     }
   };
-  setTimeout(checkConnection, 5000);
- */
-  console.log(conductorInfo);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      checkConnection();
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   const guardarDatos = (dataSend) => {
     fetch("https://pippo-test.000webhostapp.com/api/registro/addRegistro.php", {
@@ -38,6 +48,7 @@ function Index({ ganaderos, rutas, conductores }) {
           notifyError();
         } else {
           notifySuccess("agrego");
+          localStorage.removeItem("registro");
           /*  getListAllGanaderos();
        reset(); */
         }
@@ -77,7 +88,17 @@ $precio = $item["precio"]; */
     if (navigator.onLine) {
       guardarDatos(dataSend);
     } else {
-      localStorage.setItem("registro", JSON.stringify(dataSend));
+      const existing = JSON.parse(localStorage.getItem("registro"));
+
+      let dataLocal = [];
+      if (existing) {
+        existing.push(dataSend);
+        dataLocal = existing;
+      } else {
+        dataLocal = [dataSend];
+      }
+
+      localStorage.setItem("registro", JSON.stringify(dataLocal));
     }
   };
 

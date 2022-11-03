@@ -4,7 +4,6 @@ import Header from "../header";
 import "./styles.scss";
 
 function View({ rutas }) {
-  console.log(rutas);
   return (
     <div className="page rutas" id="full">
       <div className="header-page">

@@ -95,7 +95,7 @@ function View() {
       <div className="header-page">
         <Header title="Inicio" icon={<AiFillHome />} />
       </div>
-      {navigator.onLine ? "SI" : "NO"}
+
       <div className="cards">
         <div className="content-card">
           <Bar options={options2} data={data} />

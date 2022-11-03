@@ -142,10 +142,10 @@ function App() {
   const [login, setLogin] = useState(false);
   const [navi, setNav] = useState("Inicio");
 
-  console.log(userLoggued?.length);
+  /* console.log(userLoggued?.length); */
 
   useEffect(() => {
-    console.log("aqui");
+    /* console.log("aqui"); */
     setUserLoggued(JSON.parse(localStorage.getItem("user")));
   }, [login]);
 
