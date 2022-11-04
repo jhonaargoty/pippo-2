@@ -28,7 +28,7 @@ function View({
         <Header title="Exportar" icon={<RiFileExcel2Fill />} />
       </div>
       <div className="content-page">
-        <div>
+        <div className="content-data">
           <h3>Seleccione fechas</h3>
 
           <div className="data-button">
@@ -50,32 +50,31 @@ function View({
                 <div>{` - hasta ${moment(endDate).format("YYYY-MM-DD")}`}</div>
               )}
             </div>
-
-            <div
-              className={
-                startDate === null || endDate === null
-                  ? "button disabled"
-                  : "button"
-              }
-              onClick={() =>
-                startDate === null || endDate === null ? {} : getData()
-              }
-            >
-              {loading ? "Cargando..." : "Procesar datos"}
-            </div>
-
-            {data?.length >= 1 && (
-              <CSVLink
-                className="button download"
-                data={data}
-                headers={getHeader()}
-                filename={"test3"}
-                asyncOnClick={true}
-              >
-                <FaCloudDownloadAlt /> Descargar
-              </CSVLink>
-            )}
           </div>
+          <div
+            className={
+              startDate === null || endDate === null
+                ? "button disabled"
+                : "button"
+            }
+            onClick={() =>
+              startDate === null || endDate === null ? {} : getData()
+            }
+          >
+            {loading ? "Cargando..." : "Procesar datos"}
+          </div>
+
+          {data?.length >= 1 && (
+            <CSVLink
+              className="button download"
+              data={data}
+              headers={getHeader()}
+              filename={"test3"}
+              asyncOnClick={true}
+            >
+              <FaCloudDownloadAlt /> Descargar
+            </CSVLink>
+          )}
         </div>
         <ToastContainer
           position="bottom-center"

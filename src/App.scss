@@ -167,6 +167,7 @@ a {
   td {
     padding: 10px 10px;
     border: none;
+    text-transform: capitalize;
   }
   thead {
     border-bottom: 1px solid #c9000036;
@@ -228,7 +229,6 @@ a {
 
     tr {
       border-bottom: 1px solid #c90000;
-      /*  display: block; */
       margin-bottom: 0.625em;
     }
     tr:last-child {
@@ -269,7 +269,7 @@ a {
     margin-bottom: 20px;
   }
   .login {
-    padding: 10px;
+    /*  padding: 10px; */
 
     input,
     .label {
@@ -278,6 +278,7 @@ a {
   }
   .login-content {
     width: 100%;
+    margin: 10px;
   }
 
   .movil {
@@ -323,9 +324,5 @@ a {
 
   .content-page {
     overflow: scroll;
-  }
-
-  .tabla {
-    font-size: 12px;
   }
 }

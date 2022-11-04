@@ -12,12 +12,20 @@
       flex-direction: column;
       gap: 20px;
       align-items: center;
+      margin-bottom: 20px;
     }
 
     .dates-select {
       display: flex;
       gap: 10px;
     }
+  }
+  .content-data {
+    width: 100%;
+  }
+
+  .button {
+    margin-bottom: 20px;
   }
 
   .download {
@@ -29,6 +37,11 @@
 
     &:hover {
       background: #fff0f0;
+    }
+  }
+  @media (max-width: 768px) {
+    .button {
+      min-width: 0;
     }
   }
 }

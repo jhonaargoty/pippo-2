@@ -19,6 +19,9 @@
   .content-page {
     display: flex;
     justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
   }
 
   .content-form {
@@ -39,6 +42,18 @@
       flex: none;
     }
   }
+  .error {
+    color: #c90000;
+    font-size: 12px;
+  }
+
+  .not-save {
+    color: #c90000;
+    font-weight: 600;
+    font-size: 17px;
+    margin-bottom: 20px;
+  }
+
   @media screen and (max-width: 768px) {
     .formulario {
       width: 100%;
@@ -46,5 +61,8 @@
     .content-page {
       display: block;
     }
+  }
+  .content-form {
+    margin-bottom: 20px;
   }
 }

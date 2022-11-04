@@ -60,11 +60,15 @@ input:focus {
 .button {
   margin: 0 auto;
   border: 1px solid #c90000;
-  padding: 10px 20px;
+  padding: 10px 40px;
   border-radius: 30px;
   cursor: pointer;
   background-color: #c90000;
   color: #ffffff;
+  display: flex;
+  justify-content: center;
+  max-width: 200px;
+  min-width: 200px;
 }
 
 .button:hover {
@@ -81,4 +85,12 @@ input:focus {
   background-color: #75757582;
   border: #75757582;
   cursor: default;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .button {
+    min-width: 100%;
+  }
 }

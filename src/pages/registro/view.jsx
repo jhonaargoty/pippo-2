@@ -14,7 +14,27 @@ function View({
   register,
   ganaderoSelect,
   litrosSelect,
+  isValid,
+  rutas,
 }) {
+  const existing = JSON.parse(localStorage.getItem("registro"));
+
+  const searchGanadero = (id) => {
+    return ganaderos?.filter(
+      (item) => item.documento === ganaderoSelect || item.documento === id
+    )[0];
+  };
+  const searchRuta = (id) => {
+    return rutas?.filter((item) => item.id === id)[0];
+  };
+
+  const calcPromedio = () => {
+    return (
+      litrosSelect <= parseInt(searchGanadero()?.promedio) + 10 &&
+      litrosSelect >= parseInt(searchGanadero()?.promedio) - 10
+    );
+  };
+
   return (
     <div className="page registro" id="full">
       <div className="header-page">
@@ -28,7 +48,11 @@ function View({
               <form onSubmit={handleSubmit(onSubmit)} className="formulario">
                 <div>
                   <label>Seleccione ganadero</label>
-                  <select {...register("ganadero")}>
+                  <select
+                    {...register("ganadero", {
+                      required: true,
+                    })}
+                  >
                     <option value="" selected disabled hidden>
                       Seleccione
                     </option>
@@ -40,17 +64,36 @@ function View({
 
                 <div>
                   <label>Litros recolectados</label>
-                  <input type="number" {...register("litros")} />
+                  <input
+                    min={0}
+                    type="number"
+                    {...register("litros", {
+                      required: true,
+                    })}
+                  />
+                  <div className="error">
+                    {litrosSelect &&
+                      !calcPromedio() &&
+                      "Error, no cumple el promedio de litros del ganadero"}
+                  </div>
+                </div>
+
+                {console.log(searchGanadero())}
+
+                <div>
+                  <label htmlFor="" className="price-main">
+                    <div>Promedio</div>
+                    <div className="price">
+                      {searchGanadero()?.promedio || 0} lts
+                    </div>
+                  </label>
                 </div>
 
                 <div>
                   <label htmlFor="" className="price-main">
                     <div>Precio Lt</div>
                     <div className="price">
-                      ${" "}
-                      {ganaderos?.filter(
-                        (item) => item.documento === ganaderoSelect
-                      )[0]?.precio || 0}
+                      $ {searchGanadero()?.precio || 0}
                     </div>
                   </label>
                 </div>
@@ -59,20 +102,64 @@ function View({
                     <div>Precio Total</div>
                     <div className="price">
                       {`$ 
-                      ${
-                        ganaderos?.filter(
-                          (item) => item.documento === ganaderoSelect
-                        )[0]?.precio * litrosSelect || 0
-                      }`}
+                      ${searchGanadero()?.precio * litrosSelect || 0}`}
                     </div>
                   </label>
                 </div>
 
-                <input type="submit" value="Guardar" className="button" />
+                <input
+                  type="submit"
+                  value="Guardar"
+                  className="button"
+                  disabled={!isValid || !calcPromedio()}
+                />
+                <input
+                  type="button"
+                  value="Imprimir"
+                  className="button"
+                  disabled={!isValid || !calcPromedio()}
+                />
               </form>
             </div>
           </div>
         </div>
+        {existing && (
+          <div>
+            <div className="not-save">Registros sin guardar:</div>
+            <table className="tabla">
+              <thead>
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Conductor</th>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Ganadero</th>
+                  <th scope="col">Ruta</th>
+                  <th scope="col">Litros</th>
+                  <th scope="col">Precio</th>
+                  <th scope="col">Precio Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {existing?.map((registro, index) => (
+                  <tr key={index}>
+                    <td data-label="id">{index + 1}</td>
+                    <td data-label="conductor">{conductorInfo?.nombre}</td>
+                    <td data-label="fecha">{registro.fecha}</td>
+                    <td data-label="ganadero">
+                      {searchGanadero(registro.ganadero)?.nombre}
+                    </td>
+                    <td data-label="ruta">
+                      {searchRuta(registro.ruta)?.nombre}
+                    </td>
+                    <td data-label="litros">{registro.litros} lts</td>
+                    <td data-label="precio">$ {registro.precio}</td>
+                    <td data-label="precio total">$ {registro.total}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
         <ToastContainer
           position="bottom-center"
           theme="colored"

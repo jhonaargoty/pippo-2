@@ -152,7 +152,7 @@ function App() {
   return (
     <div className="main-content">
       <HashRouter>
-        {userLoggued?.length >= 1 ? (
+        {login && userLoggued?.length >= 1 ? (
           <>
             <div className={`menu ${viewMenu ? "movil-view" : "movil-noview"}`}>
               <div className="img-logo">{icons("logo")}</div>

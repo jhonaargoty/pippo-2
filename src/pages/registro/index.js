@@ -5,7 +5,8 @@ import moment from "moment";
 import View from "./view";
 
 function Index({ ganaderos, rutas, conductores }) {
-  const notifySuccess = (message) => toast.success(`Se ${message} el registro`);
+  const notifySuccess = (message) => toast.success(message);
+  const notifyWarning = (message) => toast.warning(message);
   const notifyError = () => toast.error("Error, intente de nuevo");
   const userLoggued = JSON.parse(localStorage.getItem("user"));
 
@@ -23,11 +24,17 @@ function Index({ ganaderos, rutas, conductores }) {
         const existing = JSON.parse(localStorage.getItem("registro"));
 
         existing.map((item) => guardarDatos(item));
+
+        localStorage.removeItem("registro");
       } else {
         console.log("no hay");
       }
     }
   };
+
+  useEffect(() => {
+    checkConnection();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -47,7 +54,7 @@ function Index({ ganaderos, rutas, conductores }) {
         if (response.status === 400) {
           notifyError();
         } else {
-          notifySuccess("agrego");
+          notifySuccess(`Se agrego el registro`);
           localStorage.removeItem("registro");
           /*  getListAllGanaderos();
        reset(); */
@@ -59,11 +66,13 @@ function Index({ ganaderos, rutas, conductores }) {
   };
 
   const {
+    reset,
     register,
     handleSubmit,
     watch,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isValid },
+  } = useForm({ mode: "onChange" });
+
   const onSubmit = (data) => {
     /* $conductor = $item["conductor"];
 $fecha = $item["fecha"];
@@ -88,6 +97,8 @@ $precio = $item["precio"]; */
     if (navigator.onLine) {
       guardarDatos(dataSend);
     } else {
+      notifyWarning("No hay internet, se guardará cuando exista conexión");
+
       const existing = JSON.parse(localStorage.getItem("registro"));
 
       let dataLocal = [];
@@ -113,6 +124,8 @@ $precio = $item["precio"]; */
     register,
     ganaderoSelect,
     litrosSelect,
+    isValid,
+    rutas,
   };
 
   return <View {...props} />;
