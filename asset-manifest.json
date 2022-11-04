@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/pippo-2/static/css/main.69e455b8.css",
-    "main.js": "/pippo-2/static/js/main.3046aab1.js",
+    "main.js": "/pippo-2/static/js/main.ef875a44.js",
     "static/js/787.f4f8fa85.chunk.js": "/pippo-2/static/js/787.f4f8fa85.chunk.js",
     "service-worker.js": "/pippo-2/service-worker.js",
     "static/media/logo_pipo.png": "/pippo-2/static/media/logo_pipo.ebe7292063d634d6e043.png",
     "index.html": "/pippo-2/index.html",
     "main.69e455b8.css.map": "/pippo-2/static/css/main.69e455b8.css.map",
-    "main.3046aab1.js.map": "/pippo-2/static/js/main.3046aab1.js.map",
+    "main.ef875a44.js.map": "/pippo-2/static/js/main.ef875a44.js.map",
     "787.f4f8fa85.chunk.js.map": "/pippo-2/static/js/787.f4f8fa85.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.69e455b8.css",
-    "static/js/main.3046aab1.js"
+    "static/js/main.ef875a44.js"
   ]
 }
