@@ -5,11 +5,18 @@ import Rutas from "./pages/rutas";
 import Home from "./pages/home";
 import Login from "./pages/login";
 import Conductores from "./pages/conductores";
+import Recolecciones from "./pages/recolecciones";
 import Registro from "./pages/registro";
 import Exportar from "./pages/exportar";
 import { icons } from "./pages/icons";
 import { AiFillHome, AiOutlineClose } from "react-icons/ai";
-import { FaHatCowboy, FaRoute, FaUserCircle, FaPowerOff } from "react-icons/fa";
+import {
+  FaHatCowboy,
+  FaRoute,
+  FaUserCircle,
+  FaPowerOff,
+  FaStickyNote,
+} from "react-icons/fa";
 import { ImTruck } from "react-icons/im";
 import { RiFileExcel2Fill } from "react-icons/ri";
 import { BsNodePlusFill } from "react-icons/bs";
@@ -19,39 +26,42 @@ import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import { USERS } from "./constants";
+import "moment/locale/es";
 import "./App.scss";
 
 function App() {
   const [userLoggued, setUserLoggued] = useState(
     JSON.parse(localStorage.getItem("user"))
   );
-  const notifySuccess = () => toast.success(`HAY INTERNET`);
-  const notifyError = () => toast.error(`NO HAY INTERNET`);
+  moment.locale("es");
 
-  const checkConnection = () => {
-    if (navigator.onLine) {
-      notifySuccess();
-      console.log("ok");
-    } else {
-      notifyError();
-      console.log("pailas");
-    }
-  };
-  //setTimeout(checkConnection, 5000);
+  const fechaActual = moment();
 
-  const today = moment().format("DD-MM-YYYY");
+  const fechaFormateadaDia = fechaActual.format("dddd ");
+  const fechaFormateada = fechaActual.format("D [de] MMMM [de] YYYY");
 
   const [viewMenu, setViewMenu] = useState(false);
   const [ganaderos, setGanaderos] = useState(null);
   const [conductores, setConductores] = useState(null);
   const [rutas, setRutas] = useState(null);
+  const [recolecciones, setRecolecciones] = useState(null);
 
   useEffect(() => {
     getListAllGanaderos();
     getListAllConductores();
     getListAllRutas();
+    getListAllRecolecciones();
   }, []);
 
+  const getListAllRecolecciones = () => {
+    axios
+      .get(
+        "https://pippo-test.000webhostapp.com/api/registro/getRecolecciones.php"
+      )
+      .then((response) => {
+        setRecolecciones(response.data);
+      });
+  };
   const getListAllGanaderos = () => {
     axios
       .get(
@@ -88,50 +98,52 @@ function App() {
     },
     {
       id: 2,
+      name: "Recolecciones",
+      path: "/recolecciones",
+      element: <Recolecciones recolecciones={recolecciones} />,
+      icon: <FaStickyNote />,
+    },
+    {
+      id: 3,
       name: "Ganaderos",
       path: "/ganaderos",
       element: (
         <Ganaderos
           getListAllGanaderos={getListAllGanaderos}
           ganaderos={ganaderos}
+          rutas={rutas}
         />
       ),
       icon: <FaHatCowboy />,
     },
     {
-      id: 3,
+      id: 4,
       name: "Rutas",
       path: "/rutas",
-      element: <Rutas getListAllGanaderos={getListAllRutas} rutas={rutas} />,
+      element: (
+        <Rutas
+          getListAllRutas={getListAllRutas}
+          rutas={rutas}
+          ganaderos={ganaderos}
+        />
+      ),
       icon: <FaRoute />,
     },
     {
-      id: 4,
+      id: 5,
       name: "Conductores",
       path: "/conductores",
       element: (
         <Conductores
           getListAllConductores={getListAllConductores}
           conductores={conductores}
+          rutas={rutas}
         />
       ),
       icon: <ImTruck />,
     },
     {
-      id: 5,
-      name: "Registro",
-      path: "/registro",
-      element: (
-        <Registro
-          ganaderos={ganaderos}
-          rutas={rutas}
-          conductores={conductores}
-        />
-      ),
-      icon: <BsNodePlusFill />,
-    },
-    {
-      id: 5,
+      id: 6,
       name: "Exportar",
       path: "/exportar",
       element: <Exportar />,
@@ -142,10 +154,7 @@ function App() {
   const [login, setLogin] = useState(false);
   const [navi, setNav] = useState("Inicio");
 
-  /* console.log(userLoggued?.length); */
-
   useEffect(() => {
-    /* console.log("aqui"); */
     setUserLoggued(JSON.parse(localStorage.getItem("user")));
   }, [login]);
 
@@ -154,7 +163,7 @@ function App() {
       <HashRouter>
         {login && userLoggued?.length >= 1 ? (
           <>
-            <div className={`menu ${viewMenu ? "movil-view" : "movil-noview"}`}>
+            <div className={"menu movil-noview"}>
               <div className="img-logo">{icons("logo")}</div>
 
               <div className="menu-list">
@@ -184,17 +193,12 @@ function App() {
             </div>
 
             <div className="main">
-              <div className="movil img-logo">{icons("logo")}</div>
               <div className="main-header">
-                <div
-                  className="movil menu-movil"
-                  onClick={() => setViewMenu(!viewMenu)}
-                >
-                  <TiThMenu />
-                </div>
-
                 <div className="last">
-                  {today}
+                  <div className="fecha">
+                    <div className="fechadia">{fechaFormateadaDia}</div>
+                    <div>{fechaFormateada}</div>
+                  </div>
                   <div className="user">
                     <FaUserCircle />
                     <div className="data">
@@ -234,11 +238,6 @@ function App() {
           </>
         )}
       </HashRouter>
-      <ToastContainer
-        position="bottom-center"
-        theme="colored"
-        autoClose={5000}
-      />
     </div>
   );
 }

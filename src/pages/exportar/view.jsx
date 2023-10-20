@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { RiFileExcel2Fill } from "react-icons/ri";
+import { AiFillPrinter } from "react-icons/ai";
 import { FaCloudDownloadAlt } from "react-icons/fa";
 import Header from "../header";
 import { ToastContainer } from "react-toastify";
@@ -9,6 +10,10 @@ import DatePicker from "react-datepicker";
 import { CSVLink } from "react-csv";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
+import JSZip from "jszip";
+import saveAs from "save-as";
+import { pdf } from "@react-pdf/renderer";
+import PdfFacturaGanaderos from "./pdfFacturaGanaderos";
 
 import "./styles.scss";
 
@@ -20,8 +25,38 @@ function View({
   data,
   loading,
   getHeader,
-  getData2,
+  getDateList,
 }) {
+  const today = moment().format("DD-MM-YYYY");
+
+  const x = () => {
+    const zip = new JSZip();
+
+    data?.map((d, index) =>
+      zip.file(
+        `factura_${today}_${d.ganadero.replaceAll(" ", "_")}.pdf`,
+        pdf(
+          <PdfFacturaGanaderos
+            d={d}
+            desde={moment(startDate).format("YYYY-MM-DD")}
+            hasta={moment(endDate).format("YYYY-MM-DD")}
+            dateList={getDateList()}
+          />
+        ).toBlob()
+      )
+    );
+
+    // once you finish adding all the pdf to the zip, return the zip file
+    return zip.generateAsync({ type: "blob" }).then((blob) => {
+      saveAs(
+        blob,
+        `facturas${moment(startDate).format("YYYY-MM-DD")}_${moment(
+          endDate
+        ).format("YYYY-MM-DD")}.zip`
+      );
+    });
+  };
+
   return (
     <div className="page exportar" id="full">
       <div className="header-page">
@@ -65,15 +100,20 @@ function View({
           </div>
 
           {data?.length >= 1 && (
-            <CSVLink
-              className="button download"
-              data={data}
-              headers={getHeader()}
-              filename={"test3"}
-              asyncOnClick={true}
-            >
-              <FaCloudDownloadAlt /> Descargar
-            </CSVLink>
+            <>
+              <CSVLink
+                className="button download"
+                data={data}
+                headers={getHeader()}
+                filename={"test3"}
+                asyncOnClick={true}
+              >
+                <FaCloudDownloadAlt /> Descargar
+              </CSVLink>
+              <div className="button download" onClick={() => x()}>
+                <AiFillPrinter /> Generar recibos
+              </div>
+            </>
           )}
         </div>
         <ToastContainer

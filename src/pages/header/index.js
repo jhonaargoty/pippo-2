@@ -1,10 +1,13 @@
 import React from "react";
 
-function Index({ title, icon }) {
+function Index({ title, icon, children }) {
   return (
     <div className="title">
-      {icon}
-      {title}
+      <div className="title-title">
+        {icon}
+        {title}
+      </div>
+      <div className="title-children">{children}</div>
     </div>
   );
 }

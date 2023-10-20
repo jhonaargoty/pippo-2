@@ -16,33 +16,6 @@ function Index({ ganaderos, rutas, conductores }) {
     (c) => c.usuario === userLoggued[0].usuario
   )[0];
 
-  const checkConnection = () => {
-    if (navigator.onLine) {
-      if (JSON.parse(localStorage.getItem("registro"))) {
-        console.log(JSON.parse(localStorage.getItem("registro")));
-
-        const existing = JSON.parse(localStorage.getItem("registro"));
-
-        existing.map((item) => guardarDatos(item));
-
-        localStorage.removeItem("registro");
-      } else {
-        console.log("no hay");
-      }
-    }
-  };
-
-  useEffect(() => {
-    checkConnection();
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      checkConnection();
-    }, 60000);
-    return () => clearInterval(interval);
-  }, []);
-
   const guardarDatos = (dataSend) => {
     fetch("https://pippo-test.000webhostapp.com/api/registro/addRegistro.php", {
       method: "POST",
@@ -74,13 +47,6 @@ function Index({ ganaderos, rutas, conductores }) {
   } = useForm({ mode: "onChange" });
 
   const onSubmit = (data) => {
-    /* $conductor = $item["conductor"];
-$fecha = $item["fecha"];
-$ganadero = $item["ganadero"];
-$ruta = $item["ruta"];
-$litros = $item["litros"];
-$precio = $item["precio"]; */
-
     const dataSend = {
       conductor: conductorInfo?.id,
       fecha: today,
@@ -94,23 +60,7 @@ $precio = $item["precio"]; */
           ?.precio * litrosSelect,
     };
 
-    if (navigator.onLine) {
-      guardarDatos(dataSend);
-    } else {
-      notifyWarning("No hay internet, se guardará cuando exista conexión");
-
-      const existing = JSON.parse(localStorage.getItem("registro"));
-
-      let dataLocal = [];
-      if (existing) {
-        existing.push(dataSend);
-        dataLocal = existing;
-      } else {
-        dataLocal = [dataSend];
-      }
-
-      localStorage.setItem("registro", JSON.stringify(dataLocal));
-    }
+    guardarDatos(dataSend);
   };
 
   const ganaderoSelect = watch("ganadero");

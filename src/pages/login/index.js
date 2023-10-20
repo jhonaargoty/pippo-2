@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import View from "./view";
 import { toast } from "react-toastify";
 
@@ -6,14 +6,6 @@ function Index({ setLogin }) {
   const [user, setUser] = useState(null);
   const [password, setPassword] = useState(null);
   const notifyError = () => toast.error("Error, datos invalidos");
-  const [splash, setSplash] = useState(true);
-
-  useEffect(() => {
-    const interval = setTimeout(() => {
-      setSplash(!splash);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
 
   const login = () => {
     fetch("https://pippo-test.000webhostapp.com/api/login/login.php", {
@@ -36,7 +28,7 @@ function Index({ setLogin }) {
       });
   };
 
-  const props = { user, setUser, password, setPassword, login, splash };
+  const props = { user, setUser, password, setPassword, login };
 
   return <View {...props} />;
 }

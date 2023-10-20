@@ -78,8 +78,6 @@ function View({
                   </div>
                 </div>
 
-                {console.log(searchGanadero())}
-
                 <div>
                   <label htmlFor="" className="price-main">
                     <div>Promedio</div>

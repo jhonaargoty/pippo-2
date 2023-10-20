@@ -7,77 +7,40 @@ import Header from "../header";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./styles.scss";
+import ModalDelete from "../../components/modalDelete";
+import Modal from "../../components/modal";
 
 function View({
   conductores,
   onSubmit,
   handleSubmit,
-  register,
   isValid,
   deleteItem,
+  setIsModalDeleteOpen,
+  setIsModalOpen,
+  isModalOpen,
+  setDataModal,
+  isModalDeleteOpen,
+  dataModal,
+  formAdd,
+  reset,
 }) {
-  const [viewAdd, setViewAdd] = useState(false);
-
-  const formAdd = [
-    {
-      label: "Documento",
-      type: "text",
-      ...register("documento", {
-        required: true,
-      }),
-    },
-    {
-      label: "Nombre",
-      type: "text",
-      ...register("nombre", {
-        required: true,
-      }),
-    },
-    {
-      label: "Ruta",
-      type: "text",
-      ...register("ruta", {
-        required: true,
-      }),
-    },
-    {
-      label: "Placa",
-      type: "text",
-      ...register("placa", {
-        required: true,
-      }),
-    },
-  ];
   return (
     <div className="page conductores" id="full">
       <div className="header-page">
-        <Header title="Conductores" icon={<ImTruck />} />
+        <Header title="Conductores" icon={<ImTruck />}>
+          <div
+            className="add"
+            onClick={() => {
+              setIsModalOpen(!isModalOpen);
+              setDataModal({ type: "Agregar" });
+            }}
+          >
+            <FaUserPlus />
+          </div>
+        </Header>
       </div>
-      <div className="content-page">
-        <div className="add" onClick={() => setViewAdd(!viewAdd)}>
-          <FaUserPlus />
-          Agregar
-        </div>
 
-        {viewAdd && (
-          <form onSubmit={handleSubmit(onSubmit)} className="formulario">
-            {formAdd.map((item) => (
-              <div className="formulario-item">
-                <label>{item.label}:</label>
-                <input {...item} />
-              </div>
-            ))}
-            <div className="button-form">
-              <input
-                type="submit"
-                value="Guardar"
-                className="button"
-                disabled={!isValid}
-              />
-            </div>
-          </form>
-        )}
-      </div>
       <div className="content-page">
         <table className="tabla">
           <thead>
@@ -91,18 +54,33 @@ function View({
           </thead>
           <tbody>
             {conductores?.map((conductor) => (
-              <tr>
+              <tr key={conductor?.documento}>
                 <td data-label="documento">{conductor?.documento}</td>
                 <td data-label="nombre">{conductor?.nombre}</td>
                 <td data-label="rutas">{conductor?.rutas}</td>
                 <td data-label="placa">{conductor?.placa}</td>
-                <td className="actions">
-                  <MdDeleteForever
-                    onClick={() => {
-                      deleteItem(conductor.documento);
-                    }}
-                  />
-                  <AiFillEdit />
+
+                <td>
+                  <div className="actions">
+                    <div
+                      className="item"
+                      onClick={() => {
+                        setIsModalDeleteOpen(true);
+                        setDataModal(conductor);
+                      }}
+                    >
+                      <MdDeleteForever />
+                    </div>
+                    <div
+                      className="item"
+                      onClick={() => {
+                        setIsModalOpen(!isModalOpen);
+                        setDataModal({ ...conductor, type: "Modificar" });
+                      }}
+                    >
+                      <AiFillEdit />
+                    </div>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -111,7 +89,51 @@ function View({
         <ToastContainer
           position="bottom-center"
           theme="colored"
-          autoClose={5000}
+          autoClose={3000}
+          hideProgressBar={true}
+          pauseOnHover={false}
+        />
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            reset();
+          }}
+          title={`${dataModal?.type} conductor`}
+        >
+          <form onSubmit={handleSubmit(onSubmit)} className="formulario">
+            {formAdd.map((item) => (
+              <div className="formulario-item" key={item.label}>
+                <label>{item.label}:</label>
+
+                {item.type === "text" && <input {...item} className="inputs" />}
+                {item.type === "select" && (
+                  <select name="rutas" className="inputs" {...item}>
+                    {item?.options?.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {option.nombre}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            ))}
+            <div className="button-form">
+              <input
+                type="submit"
+                value="Guardar"
+                className="button"
+                disabled={!isValid}
+              />
+            </div>
+          </form>
+        </Modal>
+        <ModalDelete
+          isOpen={isModalDeleteOpen}
+          onClose={() => setIsModalDeleteOpen(false)}
+          onDelete={() => deleteItem(dataModal?.documento)}
+          type="conductor"
+          dataModal={dataModal?.nombre}
         />
       </div>
     </div>

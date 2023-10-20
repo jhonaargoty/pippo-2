@@ -48,25 +48,13 @@ function Index({ ganaderos, rutas, conductores }) {
       headers.push({ label: item, key: item.replaceAll("-", "") })
     );
 
+    headers.push({ label: "Litros total", key: "litros_total" });
+    headers.push({ label: "Precio Total", key: "precio_total" });
+    headers.push({ label: "Fomento", key: "fomento" });
+    headers.push({ label: "Neto a Pagar", key: "neto_pagar" });
+
     return headers;
   };
-
-  function dedupe(list) {
-    let idlist = 0;
-    const arrayFilter = list.reduce((acc, current, index) => {
-      const x = acc.find((item) => item.documento === current.documento);
-
-      if (!x) {
-        idlist++;
-        acc.push({ idList: idlist, ...current });
-      } else {
-        Object.assign(x, current);
-      }
-
-      return acc;
-    }, []);
-    return arrayFilter;
-  }
 
   useEffect(() => {
     let x = [];
@@ -75,16 +63,41 @@ function Index({ ganaderos, rutas, conductores }) {
       let y = {
         ...item,
       };
+      let z = {};
 
-      getDateList()?.forEach((date, index) => {
-        if (item.fecha.replaceAll("-", "") === date.replaceAll("-", "")) {
-          y[date.replaceAll("-", "")] = item.litros;
-        }
-      });
+      const userExists = x.filter((user) => user.documento === item.documento);
 
-      x.push(y);
+      if (userExists.length) {
+        x = x.filter((user) => user.documento !== userExists[0].documento);
+
+        z = userExists[0];
+
+        getDateList()?.forEach((date, index) => {
+          if (item.fecha.replaceAll("-", "") === date.replaceAll("-", "")) {
+            z[date.replaceAll("-", "")] = item.litros;
+            z["litros_total"] = z?.litros_total + parseInt(item.litros);
+            z["precio_total"] = z?.litros_total * parseInt(item.precio);
+            z["fomento"] = (z?.precio_total * 0.75) / 100;
+            z["neto_pagar"] = z.precio_total - z.fomento;
+          }
+        });
+
+        x.push(z);
+      } else {
+        getDateList()?.forEach((date, index) => {
+          if (item.fecha.replaceAll("-", "") === date.replaceAll("-", "")) {
+            y[date.replaceAll("-", "")] = item.litros;
+            y["litros_total"] = parseInt(item.litros);
+            y["precio_total"] = parseInt(item.litros) * parseInt(item.precio);
+            y["fomento"] = (parseInt(item.litros) * 0.75) / 100;
+            y["neto_pagar"] = y.precio_total - y.fomento;
+          }
+        });
+        x.push(y);
+      }
     });
-    setUserData2(dedupe(x));
+
+    setUserData2(x);
   }, [userData]);
 
   const [loading, setLoading] = useState(false);
@@ -125,6 +138,7 @@ function Index({ ganaderos, rutas, conductores }) {
     data: userData2,
     loading,
     getHeader,
+    getDateList,
   };
 
   return <View {...props} />;
