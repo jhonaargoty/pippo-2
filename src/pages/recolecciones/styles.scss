@@ -1,39 +1,22 @@
-.conductores {
-  .add {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    width: fit-content;
+.recolecciones {
+  .select-fecha {
+    font-size: 12px;
+    margin-right: 10px;
   }
 
-  .formulario {
+  .select-fecha {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
-    &-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 15px;
-      label {
-        width: 110px;
-        min-width: 110px;
-      }
-      input,
-      select {
-        background-color: rgb(248, 250, 252);
-        text-transform: capitalize;
-      }
-    }
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
 
-    .button-form {
-      margin-top: 10px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .inputs {
-      width: 100%;
-    }
+  .no-data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 40px;
   }
 }

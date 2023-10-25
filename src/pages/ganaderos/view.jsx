@@ -55,41 +55,43 @@ function View({
             </tr>
           </thead>
           <tbody>
-            {ganaderos?.map((ganadero, index) => (
-              <tr key={index}>
-                <td>{ganadero.documento}</td>
-                <td>{ganadero.telefono}</td>
-                <td>{ganadero.nombre}</td>
-                <td>{ganadero.direccion}</td>
-                <td>{ganadero.ruta}</td>
-                <td>{ganadero.promedio} lts</td>
-                <td>
-                  <div className="precio">$ {ganadero.precio} </div>
-                </td>
-                <td>
-                  <div className="actions">
-                    <div
-                      className="item"
-                      onClick={() => {
-                        setIsModalDeleteOpen(true);
-                        setDataModal(ganadero);
-                      }}
-                    >
-                      <MdDeleteForever />
+            {ganaderos
+              ?.sort((a, b) => a.nombre.localeCompare(b.nombre))
+              .map((ganadero, index) => (
+                <tr key={index}>
+                  <td>{ganadero.documento}</td>
+                  <td>{ganadero.telefono}</td>
+                  <td>{ganadero.nombre}</td>
+                  <td>{ganadero.direccion}</td>
+                  <td>{ganadero.ruta_nombre}</td>
+                  <td>{ganadero.promedio} lts</td>
+                  <td>
+                    <div className="precio">$ {ganadero.precio} </div>
+                  </td>
+                  <td>
+                    <div className="actions">
+                      <div
+                        className="item"
+                        onClick={() => {
+                          setIsModalDeleteOpen(true);
+                          setDataModal(ganadero);
+                        }}
+                      >
+                        <MdDeleteForever />
+                      </div>
+                      <div
+                        className="item"
+                        onClick={() => {
+                          setIsModalOpen(!isModalOpen);
+                          setDataModal({ ...ganadero, type: "Modificar" });
+                        }}
+                      >
+                        <AiFillEdit />
+                      </div>
                     </div>
-                    <div
-                      className="item"
-                      onClick={() => {
-                        setIsModalOpen(!isModalOpen);
-                        setDataModal({ ...ganadero, type: "Modificar" });
-                      }}
-                    >
-                      <AiFillEdit />
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
         <ToastContainer
@@ -143,7 +145,7 @@ function View({
         <ModalDelete
           isOpen={isModalDeleteOpen}
           onClose={() => setIsModalDeleteOpen(false)}
-          onDelete={() => deleteItem(dataModal?.documento)}
+          onDelete={() => deleteItem(dataModal?.id)}
           type="ganadero"
           dataModal={dataModal?.nombre}
         />

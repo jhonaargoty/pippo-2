@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import View from "./view";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { URL_BASE } from "../../constants";
 
 function Index({ getListAllConductores, conductores, rutas }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +25,7 @@ function Index({ getListAllConductores, conductores, rutas }) {
 
   useEffect(() => {
     if (dataModal?.type === "Modificar") {
-      setValue("documento", dataModal?.documento);
+      setValue("id", dataModal?.id);
       setValue("nombre", dataModal?.nombre);
       setValue("ruta", dataModal?.ruta);
       setValue("placa", dataModal?.placa);
@@ -32,7 +33,7 @@ function Index({ getListAllConductores, conductores, rutas }) {
   }, [dataModal]);
 
   const add = (data) => {
-    fetch("https://pippo-test.000webhostapp.com/api/conductores/add.php", {
+    fetch(`${URL_BASE}/conductores/add.php`, {
       method: "POST",
       body: JSON.stringify({
         item: {
@@ -55,7 +56,7 @@ function Index({ getListAllConductores, conductores, rutas }) {
       });
   };
   const update = (data) => {
-    fetch("https://pippo-test.000webhostapp.com/api/conductores/update.php", {
+    fetch(`${URL_BASE}.000webhostapp.com/api/conductores/update.php`, {
       method: "POST",
       body: JSON.stringify({
         item: {
@@ -86,12 +87,12 @@ function Index({ getListAllConductores, conductores, rutas }) {
     }
   };
 
-  const deleteItem = (documento) => {
-    fetch("https://pippo-test.000webhostapp.com/api/conductores/delete.php", {
+  const deleteItem = (id) => {
+    fetch(`${URL_BASE}.000webhostapp.com/api/conductores/delete.php`, {
       method: "POST",
       body: JSON.stringify({
         item: {
-          documento: documento,
+          id: id,
         },
       }),
     })
@@ -111,13 +112,6 @@ function Index({ getListAllConductores, conductores, rutas }) {
   };
 
   const formAdd = [
-    {
-      label: "Documento",
-      type: "text",
-      ...register("documento", {
-        required: true,
-      }),
-    },
     {
       label: "Nombre",
       type: "text",

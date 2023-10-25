@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import moment from "moment";
 import View from "./view";
+import { URL_BASE } from "../../constants";
 
 function Index({ ganaderos, rutas, conductores }) {
   const notifySuccess = (message) => toast.success(`Se ${message} el registro`);
@@ -110,7 +111,7 @@ function Index({ ganaderos, rutas, conductores }) {
     setUserData2([]);
     setLoading(true);
 
-    fetch("https://pippo-test.000webhostapp.com/api/registro/getExport.php", {
+    fetch(`${URL_BASE}/registro/getExport.php`, {
       method: "POST",
       body: JSON.stringify({
         item: {

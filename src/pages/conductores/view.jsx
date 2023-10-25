@@ -45,20 +45,18 @@ function View({
         <table className="tabla">
           <thead>
             <tr>
-              <th scope="col">Documento</th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Ruta</th>
-              <th scope="col">Placa</th>
-              <th scope="col"></th>
+              <th>Nombre</th>
+              <th>Ruta</th>
+              <th>Placa</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {conductores?.map((conductor) => (
-              <tr key={conductor?.documento}>
-                <td data-label="documento">{conductor?.documento}</td>
-                <td data-label="nombre">{conductor?.nombre}</td>
-                <td data-label="rutas">{conductor?.rutas}</td>
-                <td data-label="placa">{conductor?.placa}</td>
+              <tr key={conductor?.id}>
+                <td>{conductor?.nombre}</td>
+                <td>{conductor?.rutas}</td>
+                <td>{conductor?.placa}</td>
 
                 <td>
                   <div className="actions">
@@ -131,7 +129,7 @@ function View({
         <ModalDelete
           isOpen={isModalDeleteOpen}
           onClose={() => setIsModalDeleteOpen(false)}
-          onDelete={() => deleteItem(dataModal?.documento)}
+          onDelete={() => deleteItem(dataModal?.id)}
           type="conductor"
           dataModal={dataModal?.nombre}
         />

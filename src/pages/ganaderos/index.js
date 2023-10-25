@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import View from "./view";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { URL_BASE } from "../../constants";
 
 function Index({ getListAllGanaderos, ganaderos, rutas }) {
   const notifySuccess = (message) => toast.success(`Se ${message} el ganadero`);
@@ -24,10 +25,7 @@ function Index({ getListAllGanaderos, ganaderos, rutas }) {
       setValue("documento", dataModal?.documento);
       setValue("telefono", dataModal?.telefono);
       setValue("nombre", dataModal?.nombre);
-      setValue(
-        "ruta",
-        rutas.find((ruta) => ruta.nombre === dataModal?.ruta)?.id
-      );
+      setValue("ruta", rutas.find((ruta) => ruta.id === dataModal?.ruta)?.id);
       setValue("direccion", dataModal?.direccion);
       setValue("promedio", dataModal?.promedio);
       setValue("precio", dataModal?.precio);
@@ -35,7 +33,7 @@ function Index({ getListAllGanaderos, ganaderos, rutas }) {
   }, [dataModal]);
 
   const add = (data) => {
-    fetch("https://pippo-test.000webhostapp.com/api/ganaderos/add.php", {
+    fetch(`${URL_BASE}/ganaderos/add.php`, {
       method: "POST",
       body: JSON.stringify({
         item: {
@@ -59,7 +57,7 @@ function Index({ getListAllGanaderos, ganaderos, rutas }) {
   };
 
   const update = (data) => {
-    fetch("https://pippo-test.000webhostapp.com/api/ganaderos/update.php", {
+    fetch(`${URL_BASE}/ganaderos/update.php`, {
       method: "POST",
       body: JSON.stringify({
         item: {
@@ -90,12 +88,12 @@ function Index({ getListAllGanaderos, ganaderos, rutas }) {
     }
   };
 
-  const deleteItem = (documento) => {
-    fetch("https://pippo-test.000webhostapp.com/api/ganaderos/delete.php", {
+  const deleteItem = (id) => {
+    fetch(`${URL_BASE}/ganaderos/delete.php`, {
       method: "POST",
       body: JSON.stringify({
         item: {
-          documento: documento,
+          id: id,
         },
       }),
     })

@@ -146,31 +146,29 @@ function View({
           }}
           title={`Ganaderos ruta ${dataModal?.nombre}`}
         >
-          {ganaderos.filter((g) => g.ruta === dataModal?.nombre).length ? (
-            <table className="tabla">
-              <thead>
-                <tr>
-                  <th>Documento</th>
-                  <th>Teléfono</th>
-                  <th>Nombre</th>
-                  <th>Dirección</th>
-                  <th>Promedio</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ganaderos
-                  .filter((g) => g.ruta === dataModal?.nombre)
-                  ?.map((ganadero, index) => (
-                    <tr key={index}>
-                      <td>{ganadero.documento}</td>
-                      <td>{ganadero.telefono}</td>
-                      <td>{ganadero.nombre}</td>
-                      <td>{ganadero.direccion}</td>
-                      <td>{ganadero.promedio} lts</td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
+          {ganaderos.filter((g) => g.ruta === dataModal?.id).length ? (
+            <div className="tabla-g">
+              <table className="tabla">
+                <thead>
+                  <tr>
+                    <th>Documento</th>
+                    <th>Nombre</th>
+                    <th>Promedio</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ganaderos
+                    .filter((g) => g.ruta === dataModal?.id)
+                    ?.map((ganadero, index) => (
+                      <tr key={index}>
+                        <td>{ganadero.documento}</td>
+                        <td>{ganadero.nombre}</td>
+                        <td>{ganadero.promedio} lts</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
             <div>No hay ganaderos en esta ruta</div>
           )}

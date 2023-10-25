@@ -6,85 +6,70 @@ import Home from "./pages/home";
 import Login from "./pages/login";
 import Conductores from "./pages/conductores";
 import Recolecciones from "./pages/recolecciones";
-import Registro from "./pages/registro";
 import Exportar from "./pages/exportar";
 import { icons } from "./pages/icons";
 import { AiFillHome, AiOutlineClose } from "react-icons/ai";
-import {
-  FaHatCowboy,
-  FaRoute,
-  FaUserCircle,
-  FaPowerOff,
-  FaStickyNote,
-} from "react-icons/fa";
+import { FaHatCowboy, FaRoute, FaStickyNote } from "react-icons/fa";
 import { ImTruck } from "react-icons/im";
 import { RiFileExcel2Fill } from "react-icons/ri";
-import { BsNodePlusFill } from "react-icons/bs";
-import { TiThMenu } from "react-icons/ti";
-import moment from "moment";
 import axios from "axios";
-import { ToastContainer } from "react-toastify";
-import { toast } from "react-toastify";
-import { USERS } from "./constants";
-import "moment/locale/es";
 import "./App.scss";
+import MainHeader from "./MainHeader";
+import { URL_BASE } from "./constants";
+import moment from "moment";
 
 function App() {
-  const [userLoggued, setUserLoggued] = useState(
-    JSON.parse(localStorage.getItem("user"))
-  );
-  moment.locale("es");
-
-  const fechaActual = moment();
-
-  const fechaFormateadaDia = fechaActual.format("dddd ");
-  const fechaFormateada = fechaActual.format("D [de] MMMM [de] YYYY");
-
+  const [userLoggued, setUserLoggued] = useState(null);
   const [viewMenu, setViewMenu] = useState(false);
   const [ganaderos, setGanaderos] = useState(null);
   const [conductores, setConductores] = useState(null);
   const [rutas, setRutas] = useState(null);
   const [recolecciones, setRecolecciones] = useState(null);
 
+  const [login, setLogin] = useState(false);
+  const [navi, setNav] = useState("Inicio");
+
   useEffect(() => {
-    getListAllGanaderos();
-    getListAllConductores();
-    getListAllRutas();
-    getListAllRecolecciones();
+    setUserLoggued(JSON.parse(localStorage.getItem("user")));
+    setLogin(JSON.parse(localStorage.getItem("user")) && true);
   }, []);
 
-  const getListAllRecolecciones = () => {
-    axios
-      .get(
-        "https://pippo-test.000webhostapp.com/api/registro/getRecolecciones.php"
-      )
-      .then((response) => {
-        setRecolecciones(response.data);
-      });
-  };
+  useEffect(() => {
+    if (userLoggued) {
+      getListAllGanaderos();
+      getListAllConductores();
+      getListAllRutas();
+      getListAllRecolecciones();
+    }
+  }, [userLoggued]);
+
   const getListAllGanaderos = () => {
-    axios
-      .get(
-        "https://pippo-test.000webhostapp.com/api/ganaderos/getListGanaderos.php"
-      )
-      .then((response) => {
-        setGanaderos(response.data);
-      });
+    axios.get(`${URL_BASE}/ganaderos/getListGanaderos.php`).then((response) => {
+      setGanaderos(response.data);
+    });
   };
   const getListAllConductores = () => {
     axios
-      .get(
-        "https://pippo-test.000webhostapp.com/api/conductores/getListConductores.php"
-      )
+      .get(`${URL_BASE}/conductores/getListConductores.php`)
       .then((response) => {
         setConductores(response.data);
       });
   };
   const getListAllRutas = () => {
+    axios.get(`${URL_BASE}/rutas/getListRutas.php`).then((response) => {
+      setRutas(response.data);
+    });
+  };
+  const getListAllRecolecciones = async () => {
+    const momentDate = moment();
+    const formattedDate = momentDate.format("YYYY-MM-DD");
+
     axios
-      .get("https://pippo-test.000webhostapp.com/api/rutas/getListRutas.php")
+      .get(
+        `${URL_BASE}/recolecciones/getRecolecciones.php?fecha=${formattedDate}`
+      )
       .then((response) => {
-        setRutas(response.data);
+        setRecolecciones(response.data);
       });
   };
 
@@ -93,14 +78,21 @@ function App() {
       id: 1,
       name: "Inicio",
       path: "/",
-      element: <Home />,
+      element: (
+        <Home
+          rutas={rutas}
+          conductores={conductores}
+          recolecciones={recolecciones}
+          ganaderos={ganaderos}
+        />
+      ),
       icon: <AiFillHome />,
     },
     {
       id: 2,
       name: "Recolecciones",
       path: "/recolecciones",
-      element: <Recolecciones recolecciones={recolecciones} />,
+      element: <Recolecciones recoleccionesInicial={recolecciones} />,
       icon: <FaStickyNote />,
     },
     {
@@ -151,17 +143,10 @@ function App() {
     },
   ];
 
-  const [login, setLogin] = useState(false);
-  const [navi, setNav] = useState("Inicio");
-
-  useEffect(() => {
-    setUserLoggued(JSON.parse(localStorage.getItem("user")));
-  }, [login]);
-
   return (
     <div className="main-content">
       <HashRouter>
-        {login && userLoggued?.length >= 1 ? (
+        {login ? (
           <>
             <div className={"menu movil-noview"}>
               <div className="img-logo">{icons("logo")}</div>
@@ -193,34 +178,7 @@ function App() {
             </div>
 
             <div className="main">
-              <div className="main-header">
-                <div className="last">
-                  <div className="fecha">
-                    <div className="fechadia">{fechaFormateadaDia}</div>
-                    <div>{fechaFormateada}</div>
-                  </div>
-                  <div className="user">
-                    <FaUserCircle />
-                    <div className="data">
-                      <span>{userLoggued[0]?.usuario}</span>
-                      <span className="tipo">
-                        {USERS[userLoggued[0]?.tipo]}
-                      </span>
-                    </div>
-                  </div>
-                  <Link to={"/"}>
-                    <div
-                      className="user-off"
-                      onClick={() => {
-                        setLogin(false);
-                        localStorage.removeItem("user");
-                      }}
-                    >
-                      <FaPowerOff />
-                    </div>
-                  </Link>
-                </div>
-              </div>
+              <MainHeader userLoggued={userLoggued} setLogin={setLogin} />
               <Routes>
                 {navs.map((nav) => {
                   return (

@@ -1,27 +1,26 @@
 import React, { useState } from "react";
 import View from "./view";
 import { toast } from "react-toastify";
+import { URL_BASE } from "../../constants";
 
 function Index({ setLogin }) {
   const [user, setUser] = useState(null);
   const [password, setPassword] = useState(null);
   const notifyError = () => toast.error("Error, datos invalidos");
 
-  const login = () => {
-    fetch("https://pippo-test.000webhostapp.com/api/login/login.php", {
+  const login = async () => {
+    await fetch(`${URL_BASE}/login/login.php`, {
       method: "POST",
       body: JSON.stringify({
-        item: {
-          user: user,
-          password: password,
-        },
+        user: user,
+        password: password,
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        if (data.length) {
+      .then((response) => {
+        if (response) {
           setLogin(true);
-          localStorage.setItem("user", JSON.stringify(data));
+          localStorage.setItem("user", JSON.stringify(response));
         } else {
           notifyError();
         }

@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import moment from "moment";
 import View from "./view";
+import { URL_BASE } from "../../constants";
 
 function Index({ ganaderos, rutas, conductores }) {
   const notifySuccess = (message) => toast.success(message);
@@ -13,11 +14,11 @@ function Index({ ganaderos, rutas, conductores }) {
   const today = moment().format("YYYY-MM-DD");
 
   const conductorInfo = conductores?.filter(
-    (c) => c.usuario === userLoggued[0].usuario
+    (c) => c.usuario === userLoggued.usuario
   )[0];
 
   const guardarDatos = (dataSend) => {
-    fetch("https://pippo-test.000webhostapp.com/api/registro/addRegistro.php", {
+    fetch(`${URL_BASE}/registro/addRegistro.php`, {
       method: "POST",
       body: JSON.stringify({
         item: dataSend,

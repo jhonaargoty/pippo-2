@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import View from "./view";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { URL_BASE } from "../../constants";
 
 function Index({ getListAllRutas, rutas, ganaderos }) {
   const notifySuccess = (message) => toast.success(`Se ${message} la ruta`);
@@ -28,7 +29,7 @@ function Index({ getListAllRutas, rutas, ganaderos }) {
   }, [dataModal]);
 
   const add = (data) => {
-    fetch("https://pippo-test.000webhostapp.com/api/rutas/add.php", {
+    fetch(`${URL_BASE}/rutas/add.php`, {
       method: "POST",
       body: JSON.stringify({
         item: {
@@ -47,10 +48,8 @@ function Index({ getListAllRutas, rutas, ganaderos }) {
     });
   };
 
-  console.log("data", dataModal);
-
   const update = (data) => {
-    fetch("https://pippo-test.000webhostapp.com/api/rutas/update.php", {
+    fetch(`${URL_BASE}/rutas/update.php`, {
       method: "POST",
       body: JSON.stringify({
         item: {
@@ -83,7 +82,7 @@ function Index({ getListAllRutas, rutas, ganaderos }) {
   };
 
   const deleteItem = (id) => {
-    fetch("https://pippo-test.000webhostapp.com/api/rutas/delete.php", {
+    fetch(`${URL_BASE}/rutas/delete.php`, {
       method: "POST",
       body: JSON.stringify({
         item: {
