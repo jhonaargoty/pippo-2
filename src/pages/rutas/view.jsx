@@ -146,7 +146,7 @@ function View({
           }}
           title={`Ganaderos ruta ${dataModal?.nombre}`}
         >
-          {ganaderos.filter((g) => g.ruta === dataModal?.id).length ? (
+          {ganaderos?.filter((g) => g.ruta === dataModal?.id).length ? (
             <div className="tabla-g">
               <table className="tabla">
                 <thead>

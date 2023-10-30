@@ -4,13 +4,30 @@ import View from "./view";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { URL_BASE } from "../../constants";
+import { useContextoPippo } from "../../ContextoPippo";
 
-function Index({ getListAllGanaderos, ganaderos, rutas }) {
+function Index() {
+  const { ganaderos, rutas, getListAllGanaderos } = useContextoPippo();
+
   const notifySuccess = (message) => toast.success(`Se ${message} el ganadero`);
   const notifyError = () => toast.error("Error, intente de nuevo");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const [dataModal, setDataModal] = useState();
+  const [ganaderosFilter, setGanaderosFilter] = useState([]);
+
+  const search = (e) => {
+    const fil = ganaderos?.filter(
+      (g) =>
+        g?.nombre?.toLowerCase().includes(e) ||
+        g?.documento?.toLowerCase().includes(e)
+    );
+    setGanaderosFilter(fil);
+  };
+
+  useEffect(() => {
+    setGanaderosFilter(ganaderos);
+  }, [ganaderos]);
 
   const {
     reset,
@@ -184,6 +201,8 @@ function Index({ getListAllGanaderos, ganaderos, rutas }) {
     dataModal,
     reset,
     formAdd,
+    ganaderosFilter,
+    search,
   };
 
   return <View {...props} />;

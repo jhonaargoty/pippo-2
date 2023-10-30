@@ -4,8 +4,11 @@ import View from "./view";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { URL_BASE } from "../../constants";
+import { useContextoPippo } from "../../ContextoPippo";
 
-function Index({ getListAllRutas, rutas, ganaderos }) {
+function Index() {
+  const { getListAllRutas, rutas, ganaderos } = useContextoPippo();
+
   const notifySuccess = (message) => toast.success(`Se ${message} la ruta`);
   const notifyError = () => toast.error("Error, intente de nuevo");
   const [isModalOpen, setIsModalOpen] = useState(false);

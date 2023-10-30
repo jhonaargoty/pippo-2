@@ -1,134 +1,115 @@
-import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
+import React, { useState } from "react";
 import moment from "moment";
 import View from "./view";
 import { URL_BASE } from "../../constants";
+import axios from "axios";
+import { useContextoPippo } from "../../ContextoPippo";
 
-function Index({ ganaderos, rutas, conductores }) {
-  const notifySuccess = (message) => toast.success(`Se ${message} el registro`);
-  const notifyError = () => toast.error("Error, intente de nuevo");
-  const userLoggued = JSON.parse(localStorage.getItem("user"));
+function Index() {
+  const { rutas } = useContextoPippo();
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(null);
+  const [recolecciones, setRecolecciones] = useState([]);
+  const [ruta, setRuta] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [reporte, setReporte] = useState(1);
+
+  console.log("ruta", ruta);
+
   const onChangeDate = (dates) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
   };
 
-  const [userData, setUserData] = useState([]);
-  const [userData2, setUserData2] = useState([]);
-
-  const getDateList = () => {
-    let from = moment(startDate);
-    let to = moment(endDate);
-
-    var now = from.clone(),
-      dates = [];
-
-    while (now.isSameOrBefore(to)) {
-      dates.push(now.format("YYYY-MM-DD"));
-      now.add(1, "days");
-    }
-
-    return dates;
-  };
-
-  const getHeader = () => {
-    let headers = [
-      { label: "Id", key: "idList" },
-      { label: "conductor", key: "conductor" },
-      { label: "ganadero", key: "ganadero" },
-      { label: "ruta", key: "ruta" },
-      { label: "precio", key: "precio" },
-      { label: "documento", key: "documento" },
-    ];
-
-    getDateList()?.forEach((item, index) =>
-      headers.push({ label: item, key: item.replaceAll("-", "") })
-    );
-
-    headers.push({ label: "Litros total", key: "litros_total" });
-    headers.push({ label: "Precio Total", key: "precio_total" });
-    headers.push({ label: "Fomento", key: "fomento" });
-    headers.push({ label: "Neto a Pagar", key: "neto_pagar" });
-
-    return headers;
-  };
-
-  useEffect(() => {
-    let x = [];
-
-    userData.forEach((item, index) => {
-      let y = {
-        ...item,
-      };
-      let z = {};
-
-      const userExists = x.filter((user) => user.documento === item.documento);
-
-      if (userExists.length) {
-        x = x.filter((user) => user.documento !== userExists[0].documento);
-
-        z = userExists[0];
-
-        getDateList()?.forEach((date, index) => {
-          if (item.fecha.replaceAll("-", "") === date.replaceAll("-", "")) {
-            z[date.replaceAll("-", "")] = item.litros;
-            z["litros_total"] = z?.litros_total + parseInt(item.litros);
-            z["precio_total"] = z?.litros_total * parseInt(item.precio);
-            z["fomento"] = (z?.precio_total * 0.75) / 100;
-            z["neto_pagar"] = z.precio_total - z.fomento;
-          }
-        });
-
-        x.push(z);
-      } else {
-        getDateList()?.forEach((date, index) => {
-          if (item.fecha.replaceAll("-", "") === date.replaceAll("-", "")) {
-            y[date.replaceAll("-", "")] = item.litros;
-            y["litros_total"] = parseInt(item.litros);
-            y["precio_total"] = parseInt(item.litros) * parseInt(item.precio);
-            y["fomento"] = (parseInt(item.litros) * 0.75) / 100;
-            y["neto_pagar"] = y.precio_total - y.fomento;
-          }
-        });
-        x.push(y);
-      }
-    });
-
-    setUserData2(x);
-  }, [userData]);
-
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setUserData2([]);
-  }, [startDate, endDate]);
-
-  const getData = () => {
-    setUserData2([]);
+  const getData = async (fecha) => {
     setLoading(true);
 
-    fetch(`${URL_BASE}/registro/getExport.php`, {
-      method: "POST",
-      body: JSON.stringify({
-        item: {
-          fechaIni: moment(startDate).format("YYYY-MM-DD"),
-          fechaFin: moment(endDate).format("YYYY-MM-DD"),
-        },
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          setUserData(data);
-          setLoading(false);
-        } else {
-          notifyError();
-        }
-      });
+    const fechaIni = moment(startDate).format("YYYY-MM-DD");
+    const fechaFin = moment(endDate).format("YYYY-MM-DD");
+
+    setTimeout(async () => {
+      try {
+        const response = await axios.get(
+          `${URL_BASE}/recolecciones/getRecoleccionesByFecha.php?fechaIni=${fechaIni}&fechaFin=${fechaFin}&rutaId=${ruta}`
+        );
+        setRecolecciones(response.data);
+      } catch (error) {
+        console.error("Error en la solicitud:", error);
+      }
+
+      setLoading(false);
+    }, 1000);
+  };
+
+  const litrosAgrupados = recolecciones?.reduce((agrupados, item) => {
+    const key = `${item.fecha}-${item.ganadero_id}`;
+    if (!agrupados[key]) {
+      agrupados[key] = {
+        fecha: item.fecha,
+        ganadero_id: item.ganadero_id,
+        ganadero_documento: item.ganadero_documento,
+        ganadero: item.ganadero,
+        ruta: item.ruta,
+        litros: 0,
+      };
+    }
+    agrupados[key].litros += parseFloat(item.litros);
+    return agrupados;
+  }, {});
+
+  const fechasUnicas = [...new Set(recolecciones?.map((item) => item.fecha))];
+
+  const ganaderosUnicos = [
+    ...new Set(recolecciones?.map((item) => item.ganadero_id)),
+  ];
+
+  const data = [];
+  ganaderosUnicos?.forEach((ganaderoId) => {
+    const totalPorGanadero = fechasUnicas?.map((fecha) =>
+      litrosAgrupados[`${fecha}-${ganaderoId}`]
+        ? litrosAgrupados[`${fecha}-${ganaderoId}`].litros
+        : 0
+    );
+
+    const rowData = {
+      Documento: recolecciones?.find((item) => item.ganadero_id === ganaderoId)
+        ?.ganadero_documento,
+      Ganadero: recolecciones?.find((item) => item.ganadero_id === ganaderoId)
+        ?.ganadero,
+      Ruta: recolecciones?.find((item) => item.ganadero_id === ganaderoId)
+        ?.ruta,
+      ...fechasUnicas?.reduce((acc, fecha, index) => {
+        acc[fecha] = totalPorGanadero[index];
+        return acc;
+      }, {}),
+      Total: totalPorGanadero.reduce((a, b) => a + b, 0),
+    };
+    data.push(rowData);
+  });
+
+  const dataAll = [];
+  recolecciones?.forEach((item) => {
+    const rowData = {
+      recoleccion_id: item?.recoleccion_id,
+      fecha: item?.fecha,
+      ruta: item?.ruta,
+      ganadero: item?.ganadero,
+      conductor: item?.conductor,
+      observaciones: item?.observaciones,
+      litros: item?.litros,
+      precio_total: `$${item?.precio * item?.litros}`,
+    };
+
+    dataAll.push(rowData);
+  });
+
+  const csvOptions = {
+    filename: `tabla_reporte_${reporte}.csv`,
+    separator: ";",
+    data: reporte === 1 ? data : dataAll,
+    uFEFF: true,
   };
 
   const props = {
@@ -136,10 +117,16 @@ function Index({ ganaderos, rutas, conductores }) {
     onChangeDate,
     endDate,
     getData,
-    data: userData2,
     loading,
-    getHeader,
-    getDateList,
+    rutas,
+    setRuta,
+    litrosAgrupados,
+    recolecciones,
+    fechasUnicas,
+    ganaderosUnicos,
+    csvOptions,
+    reporte,
+    setReporte,
   };
 
   return <View {...props} />;

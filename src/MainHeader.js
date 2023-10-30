@@ -1,17 +1,14 @@
 import React from "react";
 import "moment/locale/es";
 import moment from "moment";
-import { Routes, Route, Link, HashRouter, useNavigate } from "react-router-dom";
-import {
-  FaHatCowboy,
-  FaRoute,
-  FaUserCircle,
-  FaPowerOff,
-  FaStickyNote,
-} from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { FaUserCircle, FaPowerOff } from "react-icons/fa";
 import { USERS } from "./constants";
+import { useContextoPippo } from "./ContextoPippo";
 
-function MainHeader({ userLoggued, setLogin }) {
+function MainHeader() {
+  const { userLoggued, setLogin, setUserLoggued } = useContextoPippo();
+
   const navigate = useNavigate();
   moment.locale("es");
   const fechaActual = moment();
@@ -37,6 +34,7 @@ function MainHeader({ userLoggued, setLogin }) {
             className="user-off"
             onClick={() => {
               setLogin(false);
+              setUserLoggued(null);
               localStorage.removeItem("user");
               navigate("/login");
             }}

@@ -3,9 +3,12 @@ import moment from "moment";
 import View from "./view";
 import axios from "axios";
 import { URL_BASE } from "../../constants";
+import { useContextoPippo } from "../../ContextoPippo";
 
-function Index({ recoleccionesInicial }) {
-  const [recolecciones, setRecolecciones] = useState([]);
+function Index() {
+  const { recolecciones } = useContextoPippo();
+
+  const [recoleccionesNew, setRecoleccionesNew] = useState([]);
   const [fechaSelect, setFechaSelect] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,7 +27,7 @@ function Index({ recoleccionesInicial }) {
           `${URL_BASE}/recolecciones/getRecolecciones.php?fecha=` +
             formattedDate
         );
-        setRecolecciones(response.data);
+        setRecoleccionesNew(response.data);
       } catch (error) {
         console.error("Error en la solicitud:", error);
       }
@@ -35,7 +38,7 @@ function Index({ recoleccionesInicial }) {
 
   useEffect(() => {
     setFechaSelect(new Date());
-    setRecolecciones(recoleccionesInicial);
+    setRecoleccionesNew(recolecciones);
   }, []);
 
   const tableTemplate = [
@@ -50,7 +53,7 @@ function Index({ recoleccionesInicial }) {
   ];
 
   const props = {
-    recolecciones,
+    recoleccionesNew,
     today,
     getListAllRecolecciones,
     tableTemplate,

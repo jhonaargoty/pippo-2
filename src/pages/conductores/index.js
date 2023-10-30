@@ -4,8 +4,10 @@ import View from "./view";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { URL_BASE } from "../../constants";
+import { useContextoPippo } from "../../ContextoPippo";
 
-function Index({ getListAllConductores, conductores, rutas }) {
+function Index() {
+  const { getListAllConductores, conductores, rutas } = useContextoPippo();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const [dataModal, setDataModal] = useState();

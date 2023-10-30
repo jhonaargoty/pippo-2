@@ -23,19 +23,32 @@ function View({
   dataModal,
   reset,
   formAdd,
+  ganaderosFilter,
+  search,
 }) {
   return (
     <div className="page ganaderos" id="full">
       <div className="header-page">
         <Header title="Ganaderos" icon={<FaHatCowboy />}>
-          <div
-            className="add"
-            onClick={() => {
-              setIsModalOpen(!isModalOpen);
-              setDataModal({ type: "Agregar" });
-            }}
-          >
-            <FaUserPlus />
+          <div className="options-header">
+            <div>
+              <input
+                type="search"
+                name="search"
+                id="search"
+                placeholder="Buscar..."
+                onChange={(e) => search(e.target.value)}
+              />
+            </div>
+            <div
+              className="add"
+              onClick={() => {
+                setIsModalOpen(!isModalOpen);
+                setDataModal({ type: "Agregar" });
+              }}
+            >
+              <FaUserPlus />
+            </div>
           </div>
         </Header>
       </div>
@@ -55,7 +68,7 @@ function View({
             </tr>
           </thead>
           <tbody>
-            {ganaderos
+            {ganaderosFilter
               ?.sort((a, b) => a.nombre.localeCompare(b.nombre))
               .map((ganadero, index) => (
                 <tr key={index}>

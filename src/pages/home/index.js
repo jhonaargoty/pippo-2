@@ -3,14 +3,15 @@ import { AiFillHome } from "react-icons/ai";
 import { FaRoute } from "react-icons/fa";
 import { ImTruck } from "react-icons/im";
 import Header from "../header";
-
-import moment from "moment";
+import { useContextoPippo } from "../../ContextoPippo";
 
 import "./styles.scss";
 
-function Index({ rutas, conductores, recolecciones, ganaderos }) {
+function Index() {
+  const { rutas, conductores, recolecciones, ganaderos } = useContextoPippo();
+
   const getPorcentajeXRuta = (rutaId) => {
-    const totalXRuta = ganaderos?.filter((g) => g.ruta === rutaId)?.length || 0;
+    const totalXRuta = ganaderos?.filter((g) => g.ruta === rutaId)?.length || 1;
     const totalXRecoleccion =
       recolecciones?.filter((r) => r.ruta_id === rutaId)?.length || 0;
 
@@ -26,7 +27,7 @@ function Index({ rutas, conductores, recolecciones, ganaderos }) {
         <div className="widget">
           <div className="widget-title">
             <FaRoute />
-            Recolecciones por ruta
+            Recolecciones por ruta hoy
           </div>
           <div className="widget-content">
             <div className="progreso-main">
@@ -57,7 +58,7 @@ function Index({ rutas, conductores, recolecciones, ganaderos }) {
         <div className="widget">
           <div className="widget-title">
             <ImTruck />
-            Recolecciones por conductor
+            Recolecciones por conductor hoy
           </div>
           <div className="widget-content">
             <div className="progreso-main">

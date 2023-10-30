@@ -7,6 +7,16 @@
     width: fit-content;
   }
 
+  .options-header {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    input {
+      border-radius: 30px;
+    }
+  }
+
   .formulario {
     display: flex;
     flex-direction: column;

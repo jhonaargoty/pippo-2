@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./styles.scss";
 
 function View({
-  recolecciones,
+  recoleccionesNew,
   today,
   getListAllRecolecciones,
   tableTemplate,
@@ -36,7 +36,7 @@ function View({
             <FaSearch />
             Buscando...
           </div>
-        ) : recolecciones.length ? (
+        ) : recoleccionesNew?.length ? (
           <table className="tabla">
             <thead>
               <tr>
@@ -46,7 +46,7 @@ function View({
               </tr>
             </thead>
             <tbody>
-              {recolecciones?.map((item) => (
+              {recoleccionesNew?.map((item) => (
                 <tr key={item?.id}>
                   <td>{item?.id}</td>
                   <td>{item?.fecha}</td>
