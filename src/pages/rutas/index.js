@@ -7,7 +7,8 @@ import { URL_BASE } from "../../constants";
 import { useContextoPippo } from "../../ContextoPippo";
 
 function Index() {
-  const { getListAllRutas, rutas, ganaderos } = useContextoPippo();
+  const { getListAllRutas, rutas, ganaderos, getListAllGanaderos } =
+    useContextoPippo();
 
   const notifySuccess = (message) => toast.success(`Se ${message} la ruta`);
   const notifyError = () => toast.error("Error, intente de nuevo");
@@ -125,6 +126,64 @@ function Index() {
     },
   ];
 
+  const [ganaderosOrder, setGanaderosOrder] = useState(ganaderos);
+
+  useEffect(() => {
+    setGanaderosOrder(ganaderos?.filter((g) => g.ruta === dataModal?.id));
+  }, [dataModal]);
+
+  const upOrder = (id) => {
+    const index = ganaderosOrder.findIndex((ganadero) => ganadero.id === id);
+
+    if (index > 0) {
+      const newOrder = [...ganaderosOrder];
+      [newOrder[index].orden, newOrder[index - 1].orden] = [
+        newOrder[index - 1].orden,
+        newOrder[index].orden,
+      ];
+
+      setGanaderosOrder(newOrder);
+    }
+  };
+
+  const downOrder = (id) => {
+    const index = ganaderosOrder.findIndex((ganadero) => ganadero.id === id);
+
+    if (index < ganaderosOrder.length - 1) {
+      const newOrder = [...ganaderosOrder];
+      [newOrder[index].orden, newOrder[index + 1].orden] = [
+        newOrder[index + 1].orden,
+        newOrder[index].orden,
+      ];
+
+      setGanaderosOrder(newOrder);
+    }
+  };
+
+  const updateOrder = () => {
+    fetch(`${URL_BASE}/ganaderos/updateOrder.php`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        items: ganaderosOrder.map(({ id, orden }) => ({ id, orden })),
+      }),
+    })
+      .then((response) => {
+        if (response.status === 400) {
+          notifyError();
+        } else {
+          notifySuccess("modifico");
+          getListAllGanaderos();
+          setModalByGanaderos(false);
+        }
+      })
+      .catch((error) => {
+        notifyError();
+      });
+  };
+
   const props = {
     rutas,
     deleteItem,
@@ -141,7 +200,10 @@ function Index() {
     isValid,
     modalByGanaderos,
     setModalByGanaderos,
-    ganaderos,
+    upOrder,
+    downOrder,
+    ganaderosOrder,
+    updateOrder,
   };
   return <View {...props} />;
 }

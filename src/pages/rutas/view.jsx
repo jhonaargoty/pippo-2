@@ -2,7 +2,11 @@ import React from "react";
 import { FaRoute, FaPlus, FaHatCowboy } from "react-icons/fa";
 import Header from "../header";
 import { MdDeleteForever } from "react-icons/md";
-import { AiFillEdit } from "react-icons/ai";
+import {
+  AiFillEdit,
+  AiOutlineCaretUp,
+  AiOutlineCaretDown,
+} from "react-icons/ai";
 import "./styles.scss";
 import Modal from "../../components/modal";
 import ModalDelete from "../../components/modalDelete";
@@ -25,7 +29,10 @@ function View({
   isValid,
   modalByGanaderos,
   setModalByGanaderos,
-  ganaderos,
+  upOrder,
+  downOrder,
+  ganaderosOrder,
+  updateOrder,
 }) {
   return (
     <div className="page rutas" id="full">
@@ -145,25 +152,38 @@ function View({
             setModalByGanaderos(false);
           }}
           title={`Ganaderos ruta ${dataModal?.nombre}`}
+          actions={ganaderosOrder?.length > 1 && updateOrder}
         >
-          {ganaderos?.filter((g) => g.ruta === dataModal?.id).length ? (
+          {ganaderosOrder?.length ? (
             <div className="tabla-g">
               <table className="tabla">
                 <thead>
                   <tr>
+                    <th>Orden</th>
                     <th>Documento</th>
                     <th>Nombre</th>
                     <th>Promedio</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {ganaderos
-                    .filter((g) => g.ruta === dataModal?.id)
+                  {ganaderosOrder
+                    .sort((a, b) => a.orden - b.orden)
                     ?.map((ganadero, index) => (
                       <tr key={index}>
-                        <td>{ganadero.documento}</td>
-                        <td>{ganadero.nombre}</td>
-                        <td>{ganadero.promedio} lts</td>
+                        <td>
+                          <AiOutlineCaretUp
+                            cursor={"pointer"}
+                            onClick={() => upOrder(ganadero.id)}
+                          />
+
+                          <AiOutlineCaretDown
+                            cursor={"pointer"}
+                            onClick={() => downOrder(ganadero.id)}
+                          />
+                        </td>
+                        <td>{ganadero?.documento}</td>
+                        <td>{ganadero?.nombre}</td>
+                        <td>{ganadero?.promedio} lts</td>
                       </tr>
                     ))}
                 </tbody>

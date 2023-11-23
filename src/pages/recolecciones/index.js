@@ -4,15 +4,18 @@ import View from "./view";
 import axios from "axios";
 import { URL_BASE } from "../../constants";
 import { useContextoPippo } from "../../ContextoPippo";
+import { toast } from "react-toastify";
 
 function Index() {
   const { recolecciones } = useContextoPippo();
+  const notifySuccess = (message) => toast.success(`Se ${message} el ganadero`);
+  const notifyError = () => toast.error("Error, intente de nuevo");
 
   const [recoleccionesNew, setRecoleccionesNew] = useState([]);
   const [fechaSelect, setFechaSelect] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  const today = new Date();
+  const [toEdit, setToEdit] = useState(null);
+  const [newLts, setNewLts] = useState(null);
 
   const getListAllRecolecciones = async (fecha) => {
     setFechaSelect(fecha);
@@ -52,13 +55,48 @@ function Index() {
     "Total",
   ];
 
+  const update = (data) => {
+    fetch(`${URL_BASE}/recolecciones/updateRecoleccion.php`, {
+      method: "POST",
+      body: JSON.stringify({
+        item: {
+          ...data,
+        },
+      }),
+    })
+      .then((response) => {
+        if (response.status === 400) {
+          notifyError();
+        } else {
+          setToEdit(null);
+          notifySuccess("modifico");
+          getListAllRecolecciones(fechaSelect);
+        }
+      })
+      .catch((error) => {
+        notifyError();
+      });
+  };
+
+  const onSubmit = (id) => {
+    const data = {
+      id,
+      litros: newLts,
+    };
+    update(data);
+  };
+
   const props = {
     recoleccionesNew,
-    today,
     getListAllRecolecciones,
     tableTemplate,
     fechaSelect,
     isLoading,
+    setToEdit,
+    toEdit,
+    newLts,
+    setNewLts,
+    onSubmit,
   };
   return <View {...props} />;
 }

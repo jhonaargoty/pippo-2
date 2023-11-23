@@ -2,7 +2,7 @@ import React from "react";
 import { FaTimes } from "react-icons/fa";
 import "./styles.scss";
 
-function Index({ children, isOpen, onClose, title }) {
+function Index({ children, isOpen, onClose, title, actions }) {
   if (!isOpen) {
     return null;
   }
@@ -12,9 +12,16 @@ function Index({ children, isOpen, onClose, title }) {
       <div className="modal-content">
         <div className="title">
           {title}
-          <button onClick={onClose}>
-            <FaTimes />
-          </button>
+          <div className="actions">
+            {actions && (
+              <button className="button-ok" onClick={() => actions()}>
+                Guardar
+              </button>
+            )}
+            <button onClick={onClose}>
+              <FaTimes />
+            </button>
+          </div>
         </div>
         <div className="children">{children}</div>
       </div>

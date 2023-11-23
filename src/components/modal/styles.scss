@@ -11,6 +11,12 @@
   z-index: 1;
 }
 
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 .modal-content {
   background: white;
   border-radius: 8px;

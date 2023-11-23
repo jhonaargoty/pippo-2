@@ -1,18 +1,24 @@
 import React from "react";
 import { FaStickyNote, FaRegFrown, FaSearch } from "react-icons/fa";
+import { AiFillEdit, AiFillSave } from "react-icons/ai";
 import DatePicker from "react-datepicker";
 import Header from "../header";
+import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./styles.scss";
 
 function View({
   recoleccionesNew,
-  today,
   getListAllRecolecciones,
   tableTemplate,
   fechaSelect,
   isLoading,
+  setToEdit,
+  toEdit,
+  newLts,
+  setNewLts,
+  onSubmit,
 }) {
   return (
     <div className="page recolecciones" id="full">
@@ -54,7 +60,33 @@ function View({
                   <td>{item?.ganadero}</td>
                   <td>{item?.conductor}</td>
                   <td>{item?.observaciones}</td>
-                  <td>{item?.litros}</td>
+                  <td className="column-litros">
+                    <div>
+                      {toEdit === item.id ? (
+                        <input
+                          className="item-edit"
+                          type="number"
+                          name=""
+                          id=""
+                          defaultValue={item?.litros}
+                          min={0}
+                          onChange={(e) => setNewLts(e.target.value)}
+                        />
+                      ) : (
+                        item?.litros
+                      )}
+                    </div>
+                    <div
+                      className="icon"
+                      onClick={() =>
+                        toEdit === item.id
+                          ? onSubmit(item.id)
+                          : setToEdit(item?.id)
+                      }
+                    >
+                      {toEdit === item.id ? <AiFillSave /> : <AiFillEdit />}
+                    </div>
+                  </td>
                   <td>$ {item?.precio * item?.litros}</td>
                 </tr>
               ))}
@@ -67,6 +99,13 @@ function View({
           </div>
         )}
       </div>
+      <ToastContainer
+        position="bottom-center"
+        theme="colored"
+        autoClose={3000}
+        hideProgressBar={true}
+        pauseOnHover={false}
+      />
     </div>
   );
 }
