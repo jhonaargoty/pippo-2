@@ -88,9 +88,11 @@ function View({
               </CSVLink>
             )}
 
-            <button className="button" onClick={() => generarPDF()}>
-              <AiOutlineFileZip /> Generar desprendibles
-            </button>
+            {recolecciones?.length > 0 && (
+              <button className="button" onClick={() => generarPDF()}>
+                <AiOutlineFileZip /> Generar desprendibles
+              </button>
+            )}
           </div>
           <div className="data">
             <div className="data-tabs">

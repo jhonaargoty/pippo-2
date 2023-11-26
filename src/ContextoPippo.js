@@ -55,6 +55,7 @@ const ContextoPippoProvider = ({ children }) => {
 
   useEffect(() => {
     if (login) {
+      setUserLoggued(JSON.parse(localStorage.getItem("user")));
       getListAllGanaderos();
       getListAllConductores();
       getListAllRutas();
