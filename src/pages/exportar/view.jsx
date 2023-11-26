@@ -8,6 +8,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import { FaFileExcel, FaRegFrown, FaSearch } from "react-icons/fa";
+import { AiOutlineSearch, AiOutlineFileZip } from "react-icons/ai";
 import { CSVLink } from "react-csv";
 
 import "./styles.scss";
@@ -29,6 +30,7 @@ function View({
   csvOptions,
   reporte,
   setReporte,
+  generarPDF,
 }) {
   return (
     <div className="page exportar" id="full">
@@ -77,7 +79,7 @@ function View({
             </div>
 
             <button className="button" onClick={() => getData()}>
-              Consultar datos
+              <AiOutlineSearch /> Consultar datos
             </button>
 
             {recolecciones?.length > 0 && (
@@ -85,6 +87,10 @@ function View({
                 <FaFileExcel /> Exportar reporte {reporte}
               </CSVLink>
             )}
+
+            <button className="button" onClick={() => generarPDF()}>
+              <AiOutlineFileZip /> Generar desprendibles
+            </button>
           </div>
           <div className="data">
             <div className="data-tabs">

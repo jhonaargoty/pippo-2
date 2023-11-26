@@ -2,7 +2,6 @@ import React from "react";
 
 function Reporte2({ recolecciones }) {
   const tableTemplate = [
-    "Id",
     "Fecha",
     "Ruta",
     "Ganadero",
@@ -24,7 +23,6 @@ function Reporte2({ recolecciones }) {
       <tbody>
         {recolecciones?.map((item) => (
           <tr key={item?.recoleccion_id}>
-            <td>{item?.recoleccion_id}</td>
             <td>{item?.fecha}</td>
             <td>{item?.ruta}</td>
             <td>{item?.ganadero}</td>

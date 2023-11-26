@@ -4,6 +4,8 @@ import View from "./view";
 import { URL_BASE } from "../../constants";
 import axios from "axios";
 import { useContextoPippo } from "../../ContextoPippo";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 
 function Index() {
   const { rutas } = useContextoPippo();
@@ -112,6 +114,211 @@ function Index() {
     uFEFF: true,
   };
 
+  console.log("recolecciones", recolecciones);
+
+  const test = [
+    {
+      recoleccion_id: "390",
+      conductor_id: "5",
+      fecha: "2023-11-09",
+      ganadero: "GONZALES CASAS LAURA JIMENA",
+      ruta: "porvenir",
+      litros: "200",
+      observaciones: "",
+      conductor: "Adrian",
+      conductor_placas: "WGZ149",
+      ganadero_id: "48",
+      ganadero_documento: "1020785422",
+      precio: "2100",
+      ruta_id: "1",
+    },
+    {
+      recoleccion_id: "390-x",
+      conductor_id: "5",
+      fecha: "2023-11-10",
+      ganadero: "GONZALES CASAS LAURA JIMENA",
+      ruta: "porvenir",
+      litros: "212",
+      observaciones: "",
+      conductor: "Adrian",
+      conductor_placas: "WGZ149",
+      ganadero_id: "48",
+      ganadero_documento: "1020785422",
+      precio: "2150",
+      ruta_id: "1",
+    },
+    {
+      recoleccion_id: "390-x",
+      conductor_id: "5",
+      fecha: "2023-11-11",
+      ganadero: "GONZALES CASAS LAURA JIMENA",
+      ruta: "porvenir",
+      litros: "312",
+      observaciones: "",
+      conductor: "Adrian",
+      conductor_placas: "WGZ149",
+      ganadero_id: "48",
+      ganadero_documento: "1020785422",
+      precio: "2150",
+      ruta_id: "1",
+    },
+    {
+      recoleccion_id: "390-x",
+      conductor_id: "5",
+      fecha: "2023-11-12",
+      ganadero: "GONZALES CASAS LAURA JIMENA",
+      ruta: "porvenir",
+      litros: "32",
+      observaciones: "",
+      conductor: "Adrian",
+      conductor_placas: "WGZ149",
+      ganadero_id: "48",
+      ganadero_documento: "1020785422",
+      precio: "2150",
+      ruta_id: "1",
+    },
+    {
+      recoleccion_id: "391",
+      conductor_id: "5",
+      fecha: "2023-11-19",
+      ganadero: "BAUTISTA LEON ALIRIO",
+      ruta: "porvenir",
+      litros: "10",
+      observaciones: "X",
+      conductor: "Adrian",
+      conductor_placas: "WGZ149",
+      ganadero_id: "47",
+      ganadero_documento: "3056263",
+      precio: "1900",
+      ruta_id: "1",
+    },
+    {
+      recoleccion_id: "392",
+      conductor_id: "5",
+      fecha: "2023-11-19",
+      ganadero: "SANCHEZ AVELLANEDA ALDEMAR",
+      ruta: "porvenir",
+      litros: "10",
+      observaciones: "",
+      conductor: "Adrian",
+      conductor_placas: "WGZ149",
+      ganadero_id: "45",
+      ganadero_documento: "3056629",
+      precio: "1900",
+      ruta_id: "1",
+    },
+    {
+      recoleccion_id: "393",
+      conductor_id: "5",
+      fecha: "2023-11-19",
+      ganadero: "HERRERA GARZON IRMA NELLY",
+      ruta: "porvenir",
+      litros: "5",
+      observaciones: "",
+      conductor: "Adrian",
+      conductor_placas: "WGZ149",
+      ganadero_id: "46",
+      ganadero_documento: "20637926",
+      precio: "2100",
+      ruta_id: "1",
+    },
+    {
+      recoleccion_id: "394",
+      conductor_id: "5",
+      fecha: "2023-11-20",
+      ganadero: "VELASQUEZ ROJAS ANA DEL SALVADOR",
+      ruta: "porvenir",
+      litros: "10",
+      observaciones: "",
+      conductor: "Adrian",
+      conductor_placas: "WGZ149",
+      ganadero_id: "44",
+      ganadero_documento: "20671799",
+      precio: "2000",
+      ruta_id: "1",
+    },
+  ];
+
+  const generarPDF = () => {
+    const doc = new jsPDF();
+
+    const ganaderosData = {};
+    test.forEach((item) => {
+      const ganaderoId = item.ganadero_id;
+      if (!ganaderosData[ganaderoId]) {
+        ganaderosData[ganaderoId] = [];
+      }
+      ganaderosData[ganaderoId].push(item);
+    });
+
+    console.log("ganaderosData", ganaderosData);
+
+    Object.keys(ganaderosData).forEach((ganaderoId, index) => {
+      const ganaderoData = ganaderosData[ganaderoId];
+      const ganaderoInfo = ganaderosData[ganaderoId][0];
+
+      if (index > 0) {
+        doc.addPage();
+      }
+
+      doc.text(
+        `Documento equivalente a factura, (art3 dec.522 de 2003) No.: PLGUL`,
+        10,
+        20
+      );
+      doc.text(`ALIMENTOS PIPPO SAS`, 10, 30);
+      doc.text(`NIT 900.031.833-6`, 10, 40);
+      doc.text(`Responsable del IVA-Régimen Común`, 10, 50);
+
+      doc.text(
+        `Persona natural de quien se adquieren los bienes y/o servicios`,
+        10,
+        60
+      );
+      doc.text(`${ganaderoInfo.ganadero}`, 10, 70);
+      doc.text(`Nit`, 10, 80);
+      doc.text(`${ganaderoInfo.ganadero_documento}`, 10, 90);
+
+      doc.text(`Ciudad y fecha de la operación`, 10, 100);
+      doc.text(`Guasca Cuad. ${moment().format("DD/MM/YYYY")}`, 10, 110);
+
+      const valorTotalQuincena = ganaderoData.reduce(
+        (total, { litros, precio }) =>
+          total + parseInt(litros * precio - (litros * precio * 0.75) / 100),
+        0
+      );
+
+      const headers = [
+        "Fecha",
+        "Litros",
+        "Valor Unitario",
+        "Valor Total",
+        "Descuento Fomento",
+        "Valor Total Día",
+      ];
+
+      const rows = ganaderoData.map(({ fecha, litros, precio }) => [
+        fecha,
+        litros,
+        precio,
+        parseInt(litros * precio),
+        parseInt((litros * precio * 0.75) / 100),
+        parseInt(litros * precio - (litros * precio * 0.75) / 100),
+        "",
+      ]);
+
+      rows.push(["", "", "", "", "TOTAL", valorTotalQuincena]);
+
+      doc.autoTable({
+        startY: 20,
+        head: [headers],
+        body: rows,
+      });
+    });
+
+    doc.save("reporte.pdf");
+  };
+
   const props = {
     startDate,
     onChangeDate,
@@ -127,6 +334,7 @@ function Index() {
     csvOptions,
     reporte,
     setReporte,
+    generarPDF,
   };
 
   return <View {...props} />;

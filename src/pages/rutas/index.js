@@ -11,6 +11,7 @@ function Index() {
     useContextoPippo();
 
   const notifySuccess = (message) => toast.success(`Se ${message} la ruta`);
+  const notifySuccessOrden = (message) => toast.success(`Se modifico el orden`);
   const notifyError = () => toast.error("Error, intente de nuevo");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
@@ -163,20 +164,16 @@ function Index() {
   const updateOrder = () => {
     fetch(`${URL_BASE}/ganaderos/updateOrder.php`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
-        items: ganaderosOrder.map(({ id, orden }) => ({ id, orden })),
+        ganaderos: ganaderosOrder.map(({ id, orden }) => ({ id, orden })),
       }),
     })
       .then((response) => {
         if (response.status === 400) {
           notifyError();
         } else {
-          notifySuccess("modifico");
+          notifySuccessOrden("modifico");
           getListAllGanaderos();
-          setModalByGanaderos(false);
         }
       })
       .catch((error) => {
